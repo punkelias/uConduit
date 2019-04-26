@@ -1,5 +1,7 @@
 {
-  "name": "conduit",
-  "integrations": {},
+  "name": "uConduit",
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

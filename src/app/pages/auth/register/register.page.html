@@ -1,0 +1,170 @@
+<ion-content padding class="form-content">
+  <ion-row>
+    <ion-col col-4></ion-col>
+    <ion-col col-4><img src="../../../../assets/images/uConduit-logo.png" id="logo" /></ion-col>
+    <ion-col col-4></ion-col>
+  </ion-row>
+  <div id="separator"></div>
+  <h1>Create your account.</h1>
+
+  <ion-slides #signUpSlider>
+    <ion-slide>
+      <ion-list lines="none">
+        <form [formGroup]="step_one_form" (ngSubmit)="onSubmit()">
+
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" formControlName="email"></ion-input>
+          </ion-item>
+          <div class="validation-errors">
+            <ng-container *ngFor="let validation of validation_messages.email">
+              <div class="error-message" *ngIf="step_one_form.get('email').hasError(validation.type) && (step_one_form.get('email').dirty || step_one_form.get('email').touched || submitAttempt)">
+                <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+              </div>
+            </ng-container>
+          </div>
+          
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" formControlName="password"></ion-input>
+          </ion-item>
+          <div class="validation-errors">
+            <ng-container *ngFor="let validation of validation_messages.password">
+              <div class="error-message" *ngIf="step_one_form.get('password').hasError(validation.type) && (step_one_form.get('password').dirty || step_one_form.get('password').touched || submitAttempt)">
+                <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+              </div>
+            </ng-container>
+          </div>
+
+          <ion-row>
+            <ion-col col-3></ion-col>
+            <ion-col col-6><ion-button color="medium" class="form-button" (click)="next()">Next</ion-button></ion-col>
+            <ion-col col-3></ion-col>
+          </ion-row>
+        </form>
+      </ion-list>
+    </ion-slide>
+    <ion-slide>
+      <ion-list lines="none">
+        <form [formGroup]="step_two_form" (ngSubmit)="onSubmit()">
+          <ion-item>
+            <ion-button expand="full" (click)="selectImage()">
+                <ion-icon slot="start" name="camera"></ion-icon>
+                Select A Profile Image
+            </ion-button>            
+          </ion-item>
+
+          <ion-item *ngIf="fileToUpload" id='profile-pic'>
+            <img src="{{fileToUpload}}" >
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">First Name</ion-label>
+            <ion-input type="text" formControlName="name"></ion-input>
+          </ion-item>
+          <div class="validation-errors">
+            <ng-container *ngFor="let validation of validation_messages.name">
+              <div class="error-message" *ngIf="step_two_form.get('name').hasError(validation.type) && (step_two_form.get('name').dirty || step_two_form.get('name').touched || submitAttempt)">
+                <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+              </div>
+            </ng-container>
+          </div>
+
+          <ion-item>
+            <ion-label position="floating">Last name</ion-label>
+            <ion-input type="text" formControlName="lastname"></ion-input>
+          </ion-item>
+          <div class="validation-errors">
+            <ng-container *ngFor="let validation of validation_messages.lastname">
+              <div class="error-message" *ngIf="step_two_form.get('lastname').hasError(validation.type) && (step_two_form.get('lastname').dirty || step_two_form.get('lastname').touched || submitAttempt)">
+                <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+              </div>
+            </ng-container>
+          </div>
+
+          <ion-item>
+            <ion-label position="floating">Gender</ion-label>
+            <ion-select formControlName="gender" cancelText="Cancel" okText="OK">
+              <ion-select-option *ngFor="let gender of genders" [value]="gender">{{gender}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Birthdate</ion-label>
+            <ion-datetime formControlName="birthdate"></ion-datetime>
+          </ion-item>
+
+          <ion-row>
+            <ion-col col-2></ion-col>
+            <ion-col col-4><ion-button color="medium" class="form-button" (click)="prev()">Previous</ion-button></ion-col>
+            <ion-col col-4><ion-button color="medium" class="form-button" (click)="next()">Next</ion-button></ion-col>
+            <ion-col col-2></ion-col>
+          </ion-row>
+        </form>
+      </ion-list>
+    </ion-slide>
+    <ion-slide>
+        <ion-list lines="none">
+          <form [formGroup]="step_three_form" (ngSubmit)="onSubmit()">  
+            <ion-item>
+              <ion-label position="floating">Country</ion-label>
+              <ion-select (ionChange)="countrySelected()" formControlName="countrycode" class='dropdown-countries' placeholder="Select your Country">
+                <ion-select-option *ngFor="let country of countries" class='dropdown-country' value="{{country.code}}">{{country.name}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <div class="validation-errors">
+              <ng-container *ngFor="let validation of validation_messages.countrycode">
+                <div class="error-message" *ngIf="step_three_form.get('countrycode').hasError(validation.type) && (step_three_form.get('countrycode').dirty || step_three_form.get('countrycode').touched || submitAttempt)">
+                  <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+                </div>
+              </ng-container>
+            </div>
+  
+            <ion-item *ngIf="states && states.length > 0">
+              <ion-label position="floating">State</ion-label>
+              <ion-select (ionChange)="stateSelected()" formControlName="stateid" class='dropdown-states' placeholder="Select your State">
+                <ion-select-option *ngFor="let state of states" class='dropdown-state' value="{{state.id}}">{{state.name}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+  
+            <ion-item *ngIf="cities && cities.length > 0">
+              <ion-label position="floating">City</ion-label>
+              <ion-select formControlName="cityid" class='dropdown-cities' placeholder="Select your City">
+                <ion-select-option *ngFor="let city of cities" class='dropdown-city' value="{{city.id}}">{{city.name}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Postal Code</ion-label>
+              <ion-input type="text" formControlName="postalcode"></ion-input>
+            </ion-item>
+            <div class="validation-errors">
+              <ng-container *ngFor="let validation of validation_messages.postalcode">
+                <div class="error-message" *ngIf="step_three_form.get('postalcode').hasError(validation.type) && (step_three_form.get('postalcode').dirty || step_three_form.get('postalcode').touched || submitAttempt)">
+                  <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+                </div>
+              </ng-container>
+            </div>
+  
+            <ion-item>
+              <ion-label class="terms-label">I accept terms and conditions</ion-label>
+              <ion-checkbox color="warning" formControlName="terms"></ion-checkbox>
+            </ion-item>
+            <div class="validation-errors">
+              <ng-container *ngFor="let validation of validation_messages.terms">
+                <div class="error-message" *ngIf="step_three_form.get('terms').hasError(validation.type) && (step_three_form.get('terms').dirty || step_three_form.get('terms').touched || submitAttempt)">
+                  <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+                </div>
+              </ng-container>
+            </div>
+  
+            <ion-row>
+              <ion-col col-2></ion-col>
+              <ion-col col-4><ion-button color="medium" class="form-button" (click)="prev()">Previous</ion-button></ion-col>
+              <ion-col col-4><ion-button color="medium" class="form-button" (click)="onSubmit()">Sign Up</ion-button></ion-col>
+              <ion-col col-2></ion-col>
+            </ion-row>
+          </form>
+        </ion-list>
+      </ion-slide>
+  </ion-slides>
+</ion-content>

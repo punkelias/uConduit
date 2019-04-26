@@ -1,0 +1,128 @@
+<ion-header id="details-header" color="primary">
+  <ion-toolbar>
+    <ion-title id="details-poll-name">{{poll.name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding [ngClass]="poll.color_class" (click)="closeKeyboard()">
+  <ion-slides #detailsSlider class="swiper-no-swiping">
+    <ion-slide class="swiper-no-swiping" *ngFor="let question of poll.questions; let i = index;">
+      <ion-card>
+        <ion-grid class='question-grid'>
+          <ion-row>
+            <ion-col col-1 class="back-button">
+              <ion-button [attr.clear]="true" fill="clear" (click)="goBack()">
+              <ion-icon name="arrow-round-back"></ion-icon>
+              </ion-button>
+            </ion-col>
+            <ion-col col-10 class="question-number">
+              Question {{i+1}}
+            </ion-col>
+            <ion-col col-1 class="question-counter" justify-content-center align-items-center style="height: 100%">
+                {{i+1}} / {{poll.questions.length}}
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-12 class="question-text">
+                <h1>{{question.text}}</h1>
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngIf="(question.type === 'multiple' && question.answers.length == 2) || question.type === 'yesno'" class="answers-row">
+            <ion-card *ngIf="question.answers.length == 2">
+              <ion-col *ngFor="let answer of question.answers" class="answer-col">
+                <ion-button (click)="saveYesNoAnswer(question.id, answer.text, i)" [attr.clear]="true" fill="clear" [ngClass]="answer.classname">
+                  <ion-label [attr.clear]="true" fill="clear">{{answer.text}}</ion-label>
+                </ion-button>
+              </ion-col>
+            </ion-card>
+          </ion-row>
+
+          <ion-row *ngIf="question.type === 'multiple' && question.answers.length != 2" class="answers-row-multiple" [ngStyle]="{'height': (60*question.answers.length).toString() + 'px'}">
+            <ion-card *ngFor="let answer of question.answers" class="multiple-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}">
+              <ion-button [attr.clear]="true" fill="clear" expand="full" (click)="saveAnswer(question.id, answer.id.toString(), i)" [ngClass]="answer.classname">
+                <ion-label [attr.clear]="true" fill="clear">{{answer.text}}</ion-label>
+              </ion-button>
+            </ion-card>
+          </ion-row>
+
+          <ion-row *ngIf="question.type === 'scale'">
+
+          </ion-row>
+
+          <ion-row *ngIf="question.type === 'dropdown'">
+            <ion-col>
+              <ion-select [(ngModel)]="openQuestions[i].value" class='dropdown-question' placeholder="Select An Answer">
+                <ion-select-option *ngFor="let answer of question.answers" class='dropdown-answer' value="{{answer.id}}">{{answer.text}}</ion-select-option>
+              </ion-select>
+            </ion-col>
+            <ion-button class='open-question-button' (click)="saveOpenAnswer(question, i)">
+              <ion-label *ngIf="i < poll.questions.length - 1; else lastQuesiton">Next</ion-label>
+              <ng-template #lastQuesiton>
+                <ion-label>Finish</ion-label>
+              </ng-template>
+            </ion-button>
+          </ion-row>
+
+          <ion-row *ngIf="question.type === 'rating'">
+
+          </ion-row>
+
+          <ion-row *ngIf="question.type === 'matrix'">
+
+          </ion-row>
+
+          <ion-row *ngIf="question.type === 'ranking'">
+
+          </ion-row>
+
+          <ion-row *ngIf="question.type === 'range'">
+            <ion-item class='range-value'>
+              <ion-label>
+                {{openQuestions[i].value}}
+              </ion-label>
+            </ion-item>
+            <ion-item class='range-slider'>
+              <ion-range min="0" max="100" [(ngModel)]="openQuestions[i].value">
+                <ion-label slot="start">0</ion-label>
+                <ion-label slot="end">100</ion-label>
+              </ion-range>
+            </ion-item>            
+            <ion-button class='open-question-button' (click)="saveOpenAnswer(question, i)">
+              <ion-label *ngIf="i < poll.questions.length - 1; else lastQuesiton">Next</ion-label>
+              <ng-template #lastQuesiton>
+                <ion-label>Finish</ion-label>
+              </ng-template>
+            </ion-button>
+          </ion-row>
+
+          <ion-row class='open-question-row' *ngIf="question.type === 'open'">
+            <ion-item class='open-question'>
+              <ion-textarea class='open-question-textarea' [(ngModel)]="openQuestions[i].value"></ion-textarea>
+            </ion-item>
+            <ion-button class='open-question-button' (click)="saveOpenAnswer(question, i)">
+              <ion-label *ngIf="i < poll.questions.length - 1; else lastQuesiton">Next</ion-label>
+              <ng-template #lastQuesiton>
+                <ion-label>Finish</ion-label>
+              </ng-template>
+            </ion-button>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+    </ion-slide>
+
+    <!--<ion-slide id='poll-end'>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-2></ion-col>
+          <ion-col col-6>
+            <ion-button (click)="sendAnswers()">
+              End Poll
+            </ion-button>
+          </ion-col>
+          <ion-col col-2></ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>-->
+  </ion-slides>
+</ion-content>

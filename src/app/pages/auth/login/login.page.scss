@@ -1,0 +1,44 @@
+* {
+  font-family: 'Lato-Regular';
+}
+
+h1 {
+    text-align: center;
+    color: #D6D3D1;
+}
+
+ion-content {
+    --ion-background-color: #1A1919;
+    --color: #D6D3D1;
+}
+
+#login {
+    --background: url('../../../../assets/images/Loading-image-6-signin.jpg') no-repeat 50% 10%;
+    background-repeat: no-repeat;
+    background-size:cover;
+}
+
+ion-item {
+    --color: #D6D3D1;
+    --ion-background-color: transparent;
+}
+
+#separator {
+    height: 20%;
+}
+
+#registerButton {
+    --color: #D6D3D1;
+    position: absolute; 
+    bottom: -10px;
+    font-size: 12px;
+}
+
+#loginButton {
+    --color: #D6D3D1;
+    margin-top: 20px;
+}
+
+ion-input {
+    border-bottom: solid #D6D3D1 1px;
+}

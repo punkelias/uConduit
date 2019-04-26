@@ -1,0 +1,48 @@
+<ion-content>
+  <ion-row>
+      <ion-col col-4></ion-col>
+      <ion-col col-4><img src="../../../../assets/images/uConduit-logo.png" id="logo" /></ion-col>
+      <ion-col col-4></ion-col>
+  </ion-row>
+  <div id="separator"></div>
+  <ion-slides pager=false slidesPerView="2" spaceBetween="20" *ngIf="polls && polls.length > 0; else emptyPolls">
+    <ion-slide class='poll-slide' *ngFor="let item of polls" [routerLink]="['/details/', item.id]" routerDirection="forward">
+      <ion-grid>
+        <ion-row class="cover-row">
+            <ion-col col-12>
+              <ion-img class='poll-cover' [src]="item.cover"></ion-img>
+            </ion-col>
+          </ion-row>
+        <ion-row class='poll-created-row'>
+          <ion-col col-4>
+            <span class='poll-created' [ngStyle]="{'color': item.color}">{{item.created_at | dateAgo}}</span>
+          </ion-col>
+          <ion-col col-4></ion-col>
+          <ion-col col-4></ion-col>
+        </ion-row>
+        <ion-row class='poll-title'>
+          <ion-col col-12>
+            <h1>{{item.name}}</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row class='poll-info' [ngStyle]="{'color': item.color}">
+          <ion-col col-3>
+            <span class='poll-capacity'>{{item.max_capacity}} polls</span>
+          </ion-col>
+          <ion-col col-4>
+            <span class='poll-questions'>{{item.questions.length}} questions</span>
+          </ion-col>
+          <ion-col col-3>
+            <span class='poll-points'>{{item.points}} points</span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+    
+  <ng-template #emptyPolls>
+    <div id="no-polls-span">
+      There are no available polls at the moment.
+    </div>
+  </ng-template>
+</ion-content>
