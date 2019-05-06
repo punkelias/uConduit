@@ -11,6 +11,7 @@ import { Observable, of } from 'rxjs';
 import { Place } from '../models/place';
 import { Answer } from '../models/answer';
 import { Mission } from '../models/mission';
+import { PlayerMission } from '../models/playerMission';
 
 @Injectable({
   providedIn: 'root'
@@ -76,6 +77,46 @@ export class AuthService {
             error => console.error('Error storing item', error)
           );
 
+          const today = new Date();
+          const consecutive = 1;
+
+          this.storage.get('last_login').then(
+            (lastLogin) => {
+              const oneDay = 24 * 60 * 60 * 100;
+              const lastLoginDate = new Date(lastLogin);
+              today.setHours(0, 0, 0);
+              lastLoginDate.setHours(0, 0, 0);
+
+              const diffDates = Math.ceil(Math.abs(today.getTime() - lastLoginDate.getTime()) / (oneDay));
+
+              this.storage.get('consecutive_logins').then(
+                (val) => {
+                  if (diffDates > 2) {
+                    this.storage.set('consecutive_logins', consecutive);
+                  } else if (diffDates == 2) {
+                    val += 1;
+                    this.storage.set('consecutive_logins', val);
+                  } else if (val == 0) {
+                    this.storage.set('consecutive_logins', consecutive);
+                  }
+                }).catch((error) => {
+                  this.storage.set('consecutive_logins', consecutive);
+              });
+
+              this.storage.set('last_login', today);
+          }).catch((error) => {
+            this.storage.set('last_login', today);
+            this.storage.set('consecutive_logins', consecutive);
+          });
+
+          this.storage.set('last_login', today)
+          .then(
+            () => {
+              console.log('Date Stored');
+            },
+            error => console.error('Error storing date', error)
+          );
+
           return this.token;
         }
       )
@@ -103,8 +144,12 @@ export class AuthService {
       formData.append('image_file', image, image.name);
     }
     formData.append('country_code', country_code);
-    formData.append('state_id', state_id);
-    formData.append('city_id', city_id);
+    if (state_id) {
+      formData.append('state_id', state_id);
+    }
+    if (city_id) {
+      formData.append('city_id', city_id);
+    }
     formData.append('postal_code', postal_code);
 
     return this.http.post(this.env.API_URL + 'player/up', formData);
@@ -115,10 +160,12 @@ export class AuthService {
       'session-token': this.token.session_token
     });
 
-    return this.http.get(this.env.API_URL + 'player/out', { headers: headers })
+    return this.http.post(this.env.API_URL + 'player/out', {}, { headers: headers })
     .pipe(
       tap(data => {
         this.storage.remove('session_token');
+        this.storage.remove('user_email');
+        this.storage.remove('user_psswd');
         this.isLoggedIn = false;
         delete this.token;
         return data;
@@ -320,34 +367,61 @@ export class AuthService {
         console.log(response);
         this.missions = response.missions;
         this.events.publish('missions:created', (this.missions));
-
-        response.missions.forEach(element => {
-            this.events.subscribe('mission' + element.id + ':progress',
-            (missionId) => {
-              this.addProgress(missionId);
-            },
-            () => {
-              console.log(element);
-            }
-          );
-        });
     });
   }
 
-  addProgress(missionId: number) {
-    const headers = new HttpHeaders({
-      'session-token': this.token.session_token
-    });
+  getMissions() {
+    return this.missions;
+  }
 
-    return this.http.post<any>(this.env.API_URL + 'player/mission/add_progress',
-      { mission_id: missionId },
-      { headers: headers }
-    ).pipe(
-      map(
-        data => {
-         console.log(data);
+  addProgress(missionName: string) {
+    let missionId = 0;
+    let userCompleted = false;
+
+    if (this.missions) {
+      for (const mission of this.missions) {
+        if (mission.name === missionName) {
+          missionId = mission.id;
         }
-      )
-    );
+      }
+    }
+
+    if (this.player.missions) {
+      for (const playerMissions of this.player.missions) {
+        if (playerMissions.mission_id == missionId) {
+          if (playerMissions.completed == 1) {
+            userCompleted = true;
+          }
+        }
+      }
+    }
+
+    if (missionId > 0 && !userCompleted) {
+      const headers = new HttpHeaders({
+        'session-token': this.token.session_token
+      });
+
+      return this.http.post<any>(this.env.API_URL + 'player/mission/add_progress',
+        { mission_id: missionId },
+        { headers: headers }
+      ).pipe(
+        map(
+          data => {
+            console.log(data);
+          }
+        )
+      );
+    }
+  }
+
+  checkUserInfo () {
+    return (this.player.last_name && this.player.first_name && this.player.birthdate && this.player.email &&
+      this.player.gender && this.player.icon_path && this.player.country_code && this.player.postal_code);
+  }
+
+  addPlayerMission (mission: PlayerMission) {
+    this.player.missions.push(mission);
+
+    this.events.publish('player:updated', (this.player));
   }
 }

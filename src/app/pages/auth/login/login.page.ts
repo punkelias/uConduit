@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController, LoadingController } from '@ionic/angular';
-import { RegisterPage } from '../register/register.page';
 import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertService } from 'src/app/services/alert.service';
@@ -65,6 +64,7 @@ export class LoginPage implements OnInit {
       },
       error => {
         this.presentLoading();
+        console.log(error);
         if (error.error.error) {
           let errorMessage = error.error.error;
           if (errorMessage === 'password') {

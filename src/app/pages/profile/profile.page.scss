@@ -7,10 +7,19 @@ h1 {
     color: #D6D3D1;
 }
 
+#logo-header {
+  --ion-background-color: #20201F;
+}
+
 ion-content {
-    --ion-background-color: #1A1919;
+    --ion-background-color: #20201F;
     --color: #D6D3D1;
     position: relative;
+}
+
+ion-card {
+  --ion-background-color: #1A1919;
+  background: #1A1919;
 }
 
 ion-input {
@@ -24,8 +33,7 @@ ion-item {
 
 #profile-card {
     position: relative;
-    top: 8%;
-    height: 80%;
+    height: 62%;
 }
 
 #profile-pic {
@@ -137,3 +145,63 @@ h1 {
     text-align: left;
     top: 100%;
   }
+
+  #badges-card {
+    height: 90%;
+    top: 10%;
+    background: #20201F;
+  }
+
+  #badges-card-title {
+    color: #D6D3D1;
+    text-align: center;
+    font-size: 16px;
+    position: relative;
+    top: 7%;
+  }
+
+  .badges-grid-col ion-label {
+    position: absolute;
+    top: 68px;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    width: 100%;
+}
+
+#knowledge-label {
+  font-size: 14px;
+}
+
+.badges-grid-col img.level-0 {
+  opacity: 0.5;
+}
+
+#profile-pic-item {
+  height: 40%;;
+}
+
+#badges-grid {
+  width: 95%;
+}
+
+.badges-grid-col {
+  background: #1A1919;
+  margin-right: 4%;
+}
+
+.badges-grid-row {
+  padding-left: 4%;
+  padding-bottom: 3%;
+}
+
+.badge-image {
+  max-width: 90%;
+  height: auto;
+  margin: 0 auto;
+}
+
+#logout-row {
+    position: relative;
+    top: 8%;
+}

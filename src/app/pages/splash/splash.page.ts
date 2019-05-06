@@ -16,13 +16,10 @@ export class SplashPage implements OnInit {
   }
 
   ionViewDidEnter() {
-
     this.splashScreen.hide();
 
     setTimeout(() => {
         this.navCtrl.navigateRoot('/dashboard');
-    }, 16000);
-
+    }, 9750);
   }
-
 }

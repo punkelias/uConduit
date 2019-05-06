@@ -1,11 +1,13 @@
 <ion-content>
-  <ion-row>
+  <ion-row id='logo-header'>
       <ion-col col-4></ion-col>
       <ion-col col-4><img src="../../../../assets/images/uConduit-logo.png" id="logo" /></ion-col>
       <ion-col col-4></ion-col>
   </ion-row>
   <ion-card id='profile-card' *ngIf="user">
-    <ion-img *ngIf="user.icon_path" id='profile-pic' [src]="user.icon_path"></ion-img>
+    <ion-item id='profile-pic-item'>
+      <ion-img *ngIf="user.icon_path" id='profile-pic' [src]="user.icon_path"></ion-img>
+    </ion-item>
     <ion-item id='profile-name'>
       <h1>{{user.first_name}} {{user.last_name}}</h1>
     </ion-item>
@@ -37,6 +39,46 @@
         </ion-grid>
       </ion-item>
     </ion-item>
+  </ion-card>
+
+  <ion-title id='badges-card-title'>Badges Earned</ion-title>
+  <ion-card id='badges-card'>
+    <ion-grid id='badges-grid'>
+      <ion-row class='badges-grid-row'>
+        <ion-col class='badges-grid-col'>
+            <img src="../../../../assets/images/level1_badge.png" class='badge-image level-0'/>
+            <ion-label id='visitor-label'>Visitor</ion-label>
+        </ion-col>
+        <ion-col class='badges-grid-col'>
+            <img src="../../../../assets/images/level1_badge.png" class='badge-image level-0'/>
+            <ion-label id='knowledge-label'>Sharer of knowledge</ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row class='badges-grid-row'>
+        <ion-col class='badges-grid-col'>
+            <img src="../../../../assets/images/level1_badge.png" class='badge-image level-0'/>
+            <ion-label id='banker-label'>Banker</ion-label>
+        </ion-col>
+        <ion-col class='badges-grid-col'>
+            <img src="../../../../assets/images/level1_badge.png" class='badge-image level-0'/>
+            <ion-label id='completer-label'>Completer</ion-label>
+        </ion-col>
+      </ion-row>
+      <!--<ion-row class='badges-grid-row'>
+        <ion-col class='badges-grid-col'>
+            <img src="../../../../assets/images/level1_badge.png" class='badge-image level-0'/>
+            <ion-label id='hoarder-label'>Hoarder</ion-label>
+        </ion-col>
+        <ion-col>
+        </ion-col>
+      </ion-row>-->
+    </ion-grid>
+
+    <ion-row id='logout-row'>
+      <ion-col col-4></ion-col>
+      <ion-col col-4><ion-button color="medium" class="form-button" (click)="logOut()">Log Out</ion-button></ion-col>
+      <ion-col col-4></ion-col>
+    </ion-row>
   </ion-card>
 
   <ion-item id='polls-background'  [hidden]=!pollsHistoryHidden>
@@ -123,7 +165,7 @@
             <ion-select [(ngModel)]="selectedPoints" class='dropdown-cash-points' placeholder="Select Points to Cash">
                 <ion-select-option class='dropdown-cash' value="10000">10,000 => 10 USD</ion-select-option>
                 <ion-select-option class='dropdown-cash' value="20000">20,000 => 20 USD</ion-select-option>
-                <ion-select-option class='dropdown-cash' value="50000">20,000 => 50 USD</ion-select-option>
+                <ion-select-option class='dropdown-cash' value="50000">50,000 => 50 USD</ion-select-option>
               </ion-select>
           </ion-col>
         </ion-row>

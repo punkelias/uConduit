@@ -1,5 +1,5 @@
 <ion-content>
-  <ion-row>
+  <ion-row id='logo-header'>
       <ion-col col-4></ion-col>
       <ion-col col-4><img src="../../../../assets/images/uConduit-logo.png" id="logo" /></ion-col>
       <ion-col col-4></ion-col>
@@ -27,7 +27,7 @@
         </ion-row>
         <ion-row class='poll-info' [ngStyle]="{'color': item.color}">
           <ion-col col-3>
-            <span class='poll-capacity'>{{item.max_capacity}} polls</span>
+            <span class='poll-capacity'>{{item.max_capacity}} available slots</span>
           </ion-col>
           <ion-col col-4>
             <span class='poll-questions'>{{item.questions.length}} questions</span>

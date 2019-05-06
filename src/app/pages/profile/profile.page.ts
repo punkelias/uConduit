@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { Events } from '@ionic/angular';
+import { Events, NavController } from '@ionic/angular';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { Poll } from 'src/app/models/poll';
 import { RedeemedPoints } from 'src/app/models/redeemedPoints';
 import { AlertService } from 'src/app/services/alert.service';
 import { Mission } from 'src/app/models/mission';
+import { PlayerMission } from 'src/app/models/playerMission';
 
 @Component({
   selector: 'app-profile',
@@ -25,6 +26,7 @@ export class ProfilePage {
   constructor(
     public events: Events,
     private alertService: AlertService,
+    private navCtrl: NavController,
     private authService: AuthService
     ) {
     this.events.subscribe('player:created',
@@ -42,23 +44,17 @@ export class ProfilePage {
       },
       () => {
         console.log(this.completedPolls);
-      });
 
-      this.events.subscribe('redeemedpoints:created',
+        // TODO: Check and add mission progress
+    });
+
+    this.events.subscribe('redeemedpoints:created',
       (redeemedPoints) => {
         this.redeemedHistory = redeemedPoints;
       },
       () => {
         console.log(this.redeemedHistory);
-      });
-
-      this.events.subscribe('missions:created',
-      (missions) => {
-        this.missions = missions;
-      },
-      () => {
-        console.log(this.missions);
-      });
+    });
   }
 
   ionViewDidEnter() {
@@ -69,10 +65,9 @@ export class ProfilePage {
     this.user = this.authService.user();
     console.log(this.user);
     this.authService.retrieveCompletedPolls();
-
     this.authService.retrieveRedeemHistory();
 
-    this.authService.retrieveMissions();
+    this.missions = this.authService.getMissions();
   }
 
   showPollsHistory () {
@@ -89,6 +84,7 @@ export class ProfilePage {
 
   hidePointsHistory () {
     this.pointsHistoryHidden = false;
+    this.cashPointsHidden = false;
   }
 
   showCashPoints () {
@@ -96,7 +92,6 @@ export class ProfilePage {
   }
 
   hideCashPoints () {
-    this.cashPointsHidden = false;
     this.hidePointsHistory();
   }
 
@@ -109,9 +104,133 @@ export class ProfilePage {
       this.alertService.presentToast('Your points are in the process of being cash out', 'success');
 
       this.user.points -= this.selectedPoints;
+      let lastBankerFound: string;
+
+      // Cash out mission
+      for (const playermission of this.user.missions) {
+        if (playermission.completed == 0) {
+          for (const mission of this.missions) {
+            if (playermission.mission_id == mission.id) {
+              if (mission.name.includes('Visitor')) {
+                lastBankerFound = mission.name;
+                this.authService.addProgress(mission.name);
+              }
+            }
+          }
+        }
+      }
+
+      if (!lastBankerFound) {
+        this.authService.addProgress('Banker 1').subscribe(
+          data => {
+            console.log(data);
+            let mission: PlayerMission;
+            let mdata: any;
+            mdata = data;
+            mission = mdata.player_mission;
+
+            this.authService.addPlayerMission(mission);
+          },
+          error => {
+          },
+          () => {
+          }
+        );
+        this.authService.addProgress('Banker 2').subscribe(
+          data => {
+            console.log(data);
+            let mission: PlayerMission;
+            let mdata: any;
+            mdata = data;
+            mission = mdata.player_mission;
+
+            this.authService.addPlayerMission(mission);
+          },
+          error => {
+          },
+          () => {
+          }
+        );
+        this.authService.addProgress('Banker 3').subscribe(
+          data => {
+            console.log(data);
+            let mission: PlayerMission;
+            let mdata: any;
+            mdata = data;
+            mission = mdata.player_mission;
+
+            this.authService.addPlayerMission(mission);
+          },
+          error => {
+          },
+          () => {
+          }
+        );
+      } else if (lastBankerFound === 'Banker 1') {
+        this.authService.addProgress('Banker 2').subscribe(
+          data => {
+            console.log(data);
+            let mission: PlayerMission;
+            let mdata: any;
+            mdata = data;
+            mission = mdata.player_mission;
+
+            this.authService.addPlayerMission(mission);
+          },
+          error => {
+          },
+          () => {
+          }
+        );
+        this.authService.addProgress('Banker 3').subscribe(
+          data => {
+            console.log(data);
+            let mission: PlayerMission;
+            let mdata: any;
+            mdata = data;
+            mission = mdata.player_mission;
+
+            this.authService.addPlayerMission(mission);
+          },
+          error => {
+          },
+          () => {
+          }
+        );
+      } else if (lastBankerFound === 'Banker 2') {
+        this.authService.addProgress('Banker 3').subscribe(
+          data => {
+            console.log(data);
+            let mission: PlayerMission;
+            let mdata: any;
+            mdata = data;
+            mission = mdata.player_mission;
+
+            this.authService.addPlayerMission(mission);
+          },
+          error => {
+          },
+          () => {
+          }
+        );
+      }
     } else {
       this.alertService.presentToast('You cannot change the selected amount of points', 'error');
     }
     this.hideCashPoints();
+  }
+
+  logOut() {
+    this.authService.logout().subscribe(
+      data => {
+        console.log(data);
+      },
+      error => {
+        console.log(error);
+      },
+      () => {
+        this.navCtrl.navigateRoot('/login');
+      }
+    );
   }
 }

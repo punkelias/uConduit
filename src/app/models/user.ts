@@ -1,3 +1,5 @@
+import { PlayerMission } from './playerMission';
+
 export class User {
     birthdate: string;
     email: string;
@@ -9,4 +11,7 @@ export class User {
     race: string;
     session_token: string;
     icon_path: string;
+    country_code: string;
+    postal_code: string;
+    missions: PlayerMission[];
 }

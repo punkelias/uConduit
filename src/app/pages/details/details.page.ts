@@ -7,6 +7,9 @@ import { AuthService } from 'src/app/services/auth.service';
 import { NavController, IonSlides } from '@ionic/angular';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { Platform } from '@ionic/angular';
+import { Mission } from 'src/app/models/mission';
+import { PlayerMission } from 'src/app/models/playerMission';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-details',
@@ -19,6 +22,8 @@ export class DetailsPage implements OnInit {
   poll: Poll;
   answers: PlayerAnswer[] = [];
   openQuestions: any[] = [];
+  missions: Mission[];
+  player: User;
 
   constructor(
     private keyboard: Keyboard,
@@ -39,6 +44,11 @@ export class DetailsPage implements OnInit {
         answer.classname = '';
       }
     }
+  }
+
+  ionViewDidEnter() {
+    this.player = this.authService.user();
+    this.missions = this.authService.getMissions();
   }
 
   GoBack() {
@@ -127,6 +137,116 @@ export class DetailsPage implements OnInit {
     this.authService.saveAnswer(JSON.stringify(this.answers), this.poll.id).subscribe(
       data => {
         console.log(data);
+        let lastSharerFound: string;
+
+        // Cash out mission
+        for (const playermission of this.player.missions) {
+          if (playermission.completed == 0) {
+            for (const mission of this.missions) {
+              if (playermission.mission_id == mission.id) {
+                if (mission.name.includes('Sharer of knowledge')) {
+                  lastSharerFound = mission.name;
+                  this.authService.addProgress(mission.name);
+                }
+              }
+            }
+          }
+        }
+
+        if (!lastSharerFound) {
+          this.authService.addProgress('Sharer of knowledge 1').subscribe(
+            missiondata => {
+              console.log(missiondata);
+              let mission: PlayerMission;
+              let mdata: any;
+              mdata = missiondata;
+              mission = mdata.player_mission;
+
+              this.authService.addPlayerMission(mission);
+            },
+            error => {
+            },
+            () => {
+            }
+          );
+          this.authService.addProgress('Sharer of knowledge 2').subscribe(
+            missiondata => {
+              console.log(missiondata);
+              let mission: PlayerMission;
+              let mdata: any;
+              mdata = missiondata;
+              mission = mdata.player_mission;
+
+              this.authService.addPlayerMission(mission);
+            },
+            error => {
+            },
+            () => {
+            }
+          );
+          this.authService.addProgress('Sharer of knowledge 3').subscribe(
+            missiondata => {
+              console.log(missiondata);
+              let mission: PlayerMission;
+              let mdata: any;
+              mdata = missiondata;
+              mission = mdata.player_mission;
+
+              this.authService.addPlayerMission(mission);
+            },
+            error => {
+            },
+            () => {
+            }
+          );
+        } else if (lastSharerFound === 'Sharer of knowledge 1') {
+          this.authService.addProgress('Sharer of knowledge 2').subscribe(
+            missiondata => {
+              console.log(missiondata);
+              let mission: PlayerMission;
+              let mdata: any;
+              mdata = missiondata;
+              mission = mdata.player_mission;
+
+              this.authService.addPlayerMission(mission);
+            },
+            error => {
+            },
+            () => {
+            }
+          );
+          this.authService.addProgress('Sharer of knowledge 3').subscribe(
+            missiondata => {
+              console.log(missiondata);
+              let mission: PlayerMission;
+              let mdata: any;
+              mdata = missiondata;
+              mission = mdata.player_mission;
+
+              this.authService.addPlayerMission(mission);
+            },
+            error => {
+            },
+            () => {
+            }
+          );
+        } else if (lastSharerFound === 'Sharer of knowledge 2') {
+          this.authService.addProgress('Sharer of knowledge 3').subscribe(
+            missiondata => {
+              console.log(missiondata);
+              let mission: PlayerMission;
+              let mdata: any;
+              mdata = missiondata;
+              mission = mdata.player_mission;
+
+              this.authService.addPlayerMission(mission);
+            },
+            error => {
+            },
+            () => {
+            }
+          );
+        }
       },
       error => {
         console.log(error);
