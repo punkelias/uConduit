@@ -173,7 +173,7 @@ h1 {
   font-size: 14px;
 }
 
-.badges-grid-col img.level-0 {
+.badges-grid-col img.level-0, .badges-grid-col img.level- {
   opacity: 0.5;
 }
 
@@ -204,4 +204,69 @@ h1 {
 #logout-row {
     position: relative;
     top: 8%;
+}
+
+#completer-image.level-1 {
+  content: url('../../../assets/images/completer_level1_badge.png');
+  opacity: 1;
+}
+
+#visitor-image.level-1 {
+  content: url('../../../assets/images/visitor_level1_badge.png');
+  opacity: 1;
+}
+
+#visitor-image.level-2 {
+  content: url('../../../assets/images/visitor_level2_badge.png');
+  opacity: 1;
+}
+
+#visitor-image.level-3 {
+  content: url('../../../assets/images/visitor_level3_badge.png');
+  opacity: 1;
+}
+
+#visitor-image.level-4 {
+  content: url('../../../assets/images/visitor_level4_badge.png');
+  opacity: 1;
+}
+
+#sharer-image.level-1 {
+  content: url('../../../assets/images/sharer_level1_badge.png');
+  opacity: 1;
+}
+
+#sharer-image.level-2 {
+  content: url('../../../assets/images/sharer_level2_badge.png');
+  opacity: 1;
+}
+
+#sharer-image.level-3 {
+  content: url('../../../assets/images/sharer_level3_badge.png');
+  opacity: 1;
+}
+
+#sharer-image.level-4 {
+  content: url('../../../assets/images/sharer_level4_badge.png');
+  opacity: 1;
+}
+
+#banker-image.level-1 {
+  content: url('../../../assets/images/banker_level1_badge.png');
+  opacity: 1;
+}
+
+#banker-image.level-2 {
+  content: url('../../../assets/images/banker_level2_badge.png');
+  opacity: 1;
+}
+
+#banker-image.level-3 {
+  content: url('../../../assets/images/banker_level3_badge.png');
+  opacity: 1;
+}
+
+#banker-image.level-4 {
+  content: url('../../../assets/images/banker_level4_badge.png');
+  opacity: 1;
 }

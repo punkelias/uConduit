@@ -14,4 +14,8 @@ export class User {
     country_code: string;
     postal_code: string;
     missions: PlayerMission[];
+    visitorLevel: number;
+    bankerLevel: number;
+    sharerLevel: number;
+    completerLevel: number;
 }

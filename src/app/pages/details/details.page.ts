@@ -157,12 +157,6 @@ export class DetailsPage implements OnInit {
           this.authService.addProgress('Sharer of knowledge 1').subscribe(
             missiondata => {
               console.log(missiondata);
-              let mission: PlayerMission;
-              let mdata: any;
-              mdata = missiondata;
-              mission = mdata.player_mission;
-
-              this.authService.addPlayerMission(mission);
             },
             error => {
             },
@@ -172,12 +166,6 @@ export class DetailsPage implements OnInit {
           this.authService.addProgress('Sharer of knowledge 2').subscribe(
             missiondata => {
               console.log(missiondata);
-              let mission: PlayerMission;
-              let mdata: any;
-              mdata = missiondata;
-              mission = mdata.player_mission;
-
-              this.authService.addPlayerMission(mission);
             },
             error => {
             },
@@ -187,12 +175,6 @@ export class DetailsPage implements OnInit {
           this.authService.addProgress('Sharer of knowledge 3').subscribe(
             missiondata => {
               console.log(missiondata);
-              let mission: PlayerMission;
-              let mdata: any;
-              mdata = missiondata;
-              mission = mdata.player_mission;
-
-              this.authService.addPlayerMission(mission);
             },
             error => {
             },
@@ -203,12 +185,6 @@ export class DetailsPage implements OnInit {
           this.authService.addProgress('Sharer of knowledge 2').subscribe(
             missiondata => {
               console.log(missiondata);
-              let mission: PlayerMission;
-              let mdata: any;
-              mdata = missiondata;
-              mission = mdata.player_mission;
-
-              this.authService.addPlayerMission(mission);
             },
             error => {
             },
@@ -218,12 +194,6 @@ export class DetailsPage implements OnInit {
           this.authService.addProgress('Sharer of knowledge 3').subscribe(
             missiondata => {
               console.log(missiondata);
-              let mission: PlayerMission;
-              let mdata: any;
-              mdata = missiondata;
-              mission = mdata.player_mission;
-
-              this.authService.addPlayerMission(mission);
             },
             error => {
             },
@@ -234,12 +204,6 @@ export class DetailsPage implements OnInit {
           this.authService.addProgress('Sharer of knowledge 3').subscribe(
             missiondata => {
               console.log(missiondata);
-              let mission: PlayerMission;
-              let mdata: any;
-              mdata = missiondata;
-              mission = mdata.player_mission;
-
-              this.authService.addPlayerMission(mission);
             },
             error => {
             },

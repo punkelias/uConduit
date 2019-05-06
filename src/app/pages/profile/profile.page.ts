@@ -111,7 +111,7 @@ export class ProfilePage {
         if (playermission.completed == 0) {
           for (const mission of this.missions) {
             if (playermission.mission_id == mission.id) {
-              if (mission.name.includes('Visitor')) {
+              if (mission.name.includes('Banker')) {
                 lastBankerFound = mission.name;
                 this.authService.addProgress(mission.name);
               }
@@ -124,12 +124,6 @@ export class ProfilePage {
         this.authService.addProgress('Banker 1').subscribe(
           data => {
             console.log(data);
-            let mission: PlayerMission;
-            let mdata: any;
-            mdata = data;
-            mission = mdata.player_mission;
-
-            this.authService.addPlayerMission(mission);
           },
           error => {
           },
@@ -140,11 +134,6 @@ export class ProfilePage {
           data => {
             console.log(data);
             let mission: PlayerMission;
-            let mdata: any;
-            mdata = data;
-            mission = mdata.player_mission;
-
-            this.authService.addPlayerMission(mission);
           },
           error => {
           },
@@ -154,12 +143,6 @@ export class ProfilePage {
         this.authService.addProgress('Banker 3').subscribe(
           data => {
             console.log(data);
-            let mission: PlayerMission;
-            let mdata: any;
-            mdata = data;
-            mission = mdata.player_mission;
-
-            this.authService.addPlayerMission(mission);
           },
           error => {
           },
@@ -170,12 +153,6 @@ export class ProfilePage {
         this.authService.addProgress('Banker 2').subscribe(
           data => {
             console.log(data);
-            let mission: PlayerMission;
-            let mdata: any;
-            mdata = data;
-            mission = mdata.player_mission;
-
-            this.authService.addPlayerMission(mission);
           },
           error => {
           },
@@ -185,12 +162,6 @@ export class ProfilePage {
         this.authService.addProgress('Banker 3').subscribe(
           data => {
             console.log(data);
-            let mission: PlayerMission;
-            let mdata: any;
-            mdata = data;
-            mission = mdata.player_mission;
-
-            this.authService.addPlayerMission(mission);
           },
           error => {
           },
@@ -201,12 +172,6 @@ export class ProfilePage {
         this.authService.addProgress('Banker 3').subscribe(
           data => {
             console.log(data);
-            let mission: PlayerMission;
-            let mdata: any;
-            mdata = data;
-            mission = mdata.player_mission;
-
-            this.authService.addPlayerMission(mission);
           },
           error => {
           },

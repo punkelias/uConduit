@@ -46,22 +46,18 @@
     <ion-grid id='badges-grid'>
       <ion-row class='badges-grid-row'>
         <ion-col class='badges-grid-col'>
-            <img src="../../../../assets/images/level1_badge.png" class='badge-image level-0'/>
-            <ion-label id='visitor-label'>Visitor</ion-label>
+          <img src="../../../../assets/images/level1_badge.png" class='badge-image level-{{user.visitorLevel}}' id='visitor-image'/>
         </ion-col>
         <ion-col class='badges-grid-col'>
-            <img src="../../../../assets/images/level1_badge.png" class='badge-image level-0'/>
-            <ion-label id='knowledge-label'>Sharer of knowledge</ion-label>
+          <img src="../../../../assets/images/level1_badge.png" class='badge-image level-{{user.sharerLevel}}' id='sharer-image'/>
         </ion-col>
       </ion-row>
       <ion-row class='badges-grid-row'>
         <ion-col class='badges-grid-col'>
-            <img src="../../../../assets/images/level1_badge.png" class='badge-image level-0'/>
-            <ion-label id='banker-label'>Banker</ion-label>
+          <img src="../../../../assets/images/level1_badge.png" class='badge-image level-{{user.bankerLevel}}' id='banker-image'/>
         </ion-col>
         <ion-col class='badges-grid-col'>
-            <img src="../../../../assets/images/level1_badge.png" class='badge-image level-0'/>
-            <ion-label id='completer-label'>Completer</ion-label>
+          <img src="../../../../assets/images/level1_badge.png" class='badge-image level-{{user.completerLevel}}' id='completer-image'/>
         </ion-col>
       </ion-row>
       <!--<ion-row class='badges-grid-row'>

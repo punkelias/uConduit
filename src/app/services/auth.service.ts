@@ -366,6 +366,27 @@ export class AuthService {
     .subscribe((response) => {
         console.log(response);
         this.missions = response.missions;
+
+        for (const playerMission of this.player.missions) {
+          if (playerMission.completed == 1) {
+            for (const mission of this.missions) {
+              if (playerMission.mission_id == mission.id) {
+                if (mission.name === 'Completer') {
+                  this.player.visitorLevel = 1;
+                } else if (mission.name.includes('Banker')) {
+                  const nameArray = mission.name.split(' ');
+                  this.player.bankerLevel = parseInt(nameArray[nameArray.length - 1], 10);
+                } else if (mission.name.includes('Sharer')) {
+                  const nameArray = mission.name.split(' ');
+                  this.player.sharerLevel = parseInt(nameArray[nameArray.length - 1], 10);
+                } else if (mission.name.includes('Visitor')) {
+                  const nameArray = mission.name.split(' ');
+                  this.player.visitorLevel = parseInt(nameArray[nameArray.length - 1], 10);
+                }
+              }
+            }
+          }
+        }
         this.events.publish('missions:created', (this.missions));
     });
   }
@@ -408,6 +429,21 @@ export class AuthService {
         map(
           data => {
             console.log(data);
+            let playerMission: PlayerMission;
+            playerMission = data.player_mission;
+
+            let found = false;
+            for (let playerM of this.player.missions) {
+              if (playerM.mission_id == playerMission.mission_id) {
+                found = true;
+                playerM = playerMission;
+              }
+            }
+
+            if (!found) {
+              this.player.missions.push(playerMission);
+            }
+            this.events.publish('player:updated', (this.player));
           }
         )
       );
@@ -417,11 +453,5 @@ export class AuthService {
   checkUserInfo () {
     return (this.player.last_name && this.player.first_name && this.player.birthdate && this.player.email &&
       this.player.gender && this.player.icon_path && this.player.country_code && this.player.postal_code);
-  }
-
-  addPlayerMission (mission: PlayerMission) {
-    this.player.missions.push(mission);
-
-    this.events.publish('player:updated', (this.player));
   }
 }

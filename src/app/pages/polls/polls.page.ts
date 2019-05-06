@@ -43,12 +43,6 @@ export class PollsPage implements OnInit, AfterViewInit {
             this.authService.addProgress('Completer').subscribe(
               data => {
                 console.log(data);
-                let mission: PlayerMission;
-                let mdata: any;
-                mdata = data;
-                mission = mdata.player_mission;
-
-                this.authService.addPlayerMission(mission);
               },
               error => {
               },
@@ -82,12 +76,6 @@ export class PollsPage implements OnInit, AfterViewInit {
                 this.authService.addProgress('Visitor 1').subscribe(
                   data => {
                     console.log(data);
-                    let mission: PlayerMission;
-                    let mdata: any;
-                    mdata = data;
-                    mission = mdata.player_mission;
-
-                    this.authService.addPlayerMission(mission);
                   },
                   error => {
                   },
@@ -97,12 +85,6 @@ export class PollsPage implements OnInit, AfterViewInit {
                 this.authService.addProgress('Visitor 2').subscribe(
                   data => {
                     console.log(data);
-                    let mission: PlayerMission;
-                    let mdata: any;
-                    mdata = data;
-                    mission = mdata.player_mission;
-
-                    this.authService.addPlayerMission(mission);
                   },
                   error => {
                   },
@@ -112,12 +94,6 @@ export class PollsPage implements OnInit, AfterViewInit {
                 this.authService.addProgress('Visitor 3').subscribe(
                   data => {
                     console.log(data);
-                    let mission: PlayerMission;
-                    let mdata: any;
-                    mdata = data;
-                    mission = mdata.player_mission;
-
-                    this.authService.addPlayerMission(mission);
                   },
                   error => {
                   },
@@ -128,12 +104,6 @@ export class PollsPage implements OnInit, AfterViewInit {
                 this.authService.addProgress('Visitor 2').subscribe(
                   data => {
                     console.log(data);
-                    let mission: PlayerMission;
-                    let mdata: any;
-                    mdata = data;
-                    mission = mdata.player_mission;
-
-                    this.authService.addPlayerMission(mission);
                   },
                   error => {
                   },
@@ -143,12 +113,6 @@ export class PollsPage implements OnInit, AfterViewInit {
                 this.authService.addProgress('Visitor 3').subscribe(
                   data => {
                     console.log(data);
-                    let mission: PlayerMission;
-                    let mdata: any;
-                    mdata = data;
-                    mission = mdata.player_mission;
-
-                    this.authService.addPlayerMission(mission);
                   },
                   error => {
                   },
@@ -159,12 +123,6 @@ export class PollsPage implements OnInit, AfterViewInit {
                 this.authService.addProgress('Visitor 3').subscribe(
                   data => {
                     console.log(data);
-                    let mission: PlayerMission;
-                    let mdata: any;
-                    mdata = data;
-                    mission = mdata.player_mission;
-
-                    this.authService.addPlayerMission(mission);
                   },
                   error => {
                   },
