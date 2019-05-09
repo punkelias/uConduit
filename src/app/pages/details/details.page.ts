@@ -4,11 +4,10 @@ import { Poll } from 'src/app/models/poll';
 import { PlayerAnswer } from 'src/app/models/playerAnswer';
 import { Question } from 'src/app/models/question';
 import { AuthService } from 'src/app/services/auth.service';
-import { NavController, IonSlides } from '@ionic/angular';
+import { NavController, IonSlides, Events } from '@ionic/angular';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { Platform } from '@ionic/angular';
 import { Mission } from 'src/app/models/mission';
-import { PlayerMission } from 'src/app/models/playerMission';
 import { User } from 'src/app/models/user';
 
 @Component({
@@ -24,12 +23,14 @@ export class DetailsPage implements OnInit {
   openQuestions: any[] = [];
   missions: Mission[];
   player: User;
+  checkBoxAnswers: number[] = [];
 
   constructor(
     private keyboard: Keyboard,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     public navCtrl: NavController,
+    public events: Events,
     public plt: Platform) {
     }
 
@@ -134,7 +135,7 @@ export class DetailsPage implements OnInit {
     let answersJson = JSON.stringify(answersWrapper);
     answersJson = answersJson.slice(1, -1);
 
-    this.authService.saveAnswer(JSON.stringify(this.answers), this.poll.id).subscribe(
+    this.authService.saveAnswer(JSON.stringify(this.answers), this.poll.id, this.poll.points).subscribe(
       data => {
         console.log(data);
         let lastSharerFound: string;
@@ -219,13 +220,15 @@ export class DetailsPage implements OnInit {
       }
     );
 
+    this.events.publish('polls:returned', (''));
     this.navCtrl.navigateRoot('/dashboard');
   }
 
   goBack () {
     this.slides.getActiveIndex().then(index => {
       if (index == 0) {
-        this.navCtrl.navigateRoot('/dashboard');
+        this.events.publish('polls:returned', (''));
+        this.navCtrl.navigateForward('/dashboard');
       } else {
         this.slides.slidePrev();
       }
@@ -238,5 +241,66 @@ export class DetailsPage implements OnInit {
         this.keyboard.hide();
       }
     }
+  }
+
+  updateAnswer (value: number) {
+    if (this.checkBoxAnswers.includes(value)) {
+      this.checkBoxAnswers.splice(this.checkBoxAnswers.indexOf(value), 1);
+    } else {
+      this.checkBoxAnswers.push(value);
+    }
+  }
+
+  saveCheckBoxAnswers (question: Question, index: number) {
+    const playerAnswer = new PlayerAnswer();
+    playerAnswer.poll_id = this.poll.id;
+    playerAnswer.question_id = question.id;
+    playerAnswer.value = this.checkBoxAnswers.join(',');
+    this.answers.push(playerAnswer);
+    this.checkBoxAnswers = [];
+    this.checkBoxAnswers.length = 0;
+
+    if (index < this.poll.questions.length - 1) {
+      this.slides.slideNext(1500);
+    } else {
+      this.sendAnswers();
+    }
+  }
+
+  reorderItems(ev: any, index: number) {
+    const element = this.checkBoxAnswers[ev.detail.from];
+    this.checkBoxAnswers.splice(ev.detail.from, 1);
+    this.checkBoxAnswers.splice(ev.detail.to, 0, element);
+    const answer = this.poll.questions[index].answers[ev.detail.from];
+    this.poll.questions[index].answers.splice(ev.detail.from, 1);
+    this.poll.questions[index].answers.splice(ev.detail.to, 0, answer);
+    console.log(this.checkBoxAnswers.join(','));
+    ev.detail.complete();
+  }
+
+  segmentChanged(ev: any, question: Question, index: number) {
+    const playerAnswer = new PlayerAnswer();
+    playerAnswer.poll_id = this.poll.id;
+    playerAnswer.question_id = question.id;
+    playerAnswer.value = ev.detail.value;
+    this.answers.push(playerAnswer);
+
+    if (index < this.poll.questions.length - 1) {
+      this.slides.slideNext(1500);
+    } else {
+      this.sendAnswers();
+    }
+  }
+
+  slideChanged() {
+    this.slides.getActiveIndex().then(index => {
+      if (index < this.poll.questions.length) {
+        if (this.poll.questions[index].type === 'ranking') {
+          for (const answer of this.poll.questions[index].answers) {
+            this.checkBoxAnswers.push(answer.id);
+          }
+        }
+      }
+   });
   }
 }

@@ -1,13 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap, catchError, map } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
 import { EnvService } from './env.service';
 import { User } from '../models/user';
 import { Poll } from '../models/poll';
-import { Events, AngularDelegate } from '@ionic/angular';
+import { Events } from '@ionic/angular';
 import { RedeemedPoints } from '../models/redeemedPoints';
-import { Observable, of } from 'rxjs';
 import { Place } from '../models/place';
 import { Answer } from '../models/answer';
 import { Mission } from '../models/mission';
@@ -302,7 +301,7 @@ export class AuthService {
     return null;
   }
 
-  saveAnswer(answers:  string, poll_id: number) {
+  saveAnswer(answers:  string, poll_id: number, points: number) {
     const headers = new HttpHeaders({
       'session-token': this.token.session_token
     });
@@ -311,6 +310,13 @@ export class AuthService {
     return this.http.post<any>(this.env.API_URL + 'player/poll/save/answers',
       { answers: answers, poll_id: poll_id },
       { headers: headers }
+    ).pipe(
+      map(
+        data => {
+         console.log(data);
+         this.player.points = parseInt(this.player.points.toString(), 10) + parseInt(points.toString(), 10);
+        }
+      )
     );
   }
 

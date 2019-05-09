@@ -6,7 +6,7 @@
   </ion-row>
   <div id="separator"></div>
   <ion-slides pager=false slidesPerView="2" spaceBetween="20" *ngIf="polls && polls.length > 0; else emptyPolls">
-    <ion-slide class='poll-slide' *ngFor="let item of polls" [routerLink]="['/details/', item.id]" routerDirection="forward">
+    <ion-slide class='poll-slide' *ngFor="let item of polls" (click)="showDetails(item.id)">
       <ion-grid>
         <ion-row class="cover-row">
             <ion-col col-12>

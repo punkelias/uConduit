@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import { Events, IonSlides } from '@ionic/angular';
+import { Component, OnInit, ViewChild} from '@angular/core';
+import { Events, IonSlides, NavController } from '@ionic/angular';
 import { Poll } from 'src/app/models/poll';
 import { AuthService } from 'src/app/services/auth.service';
 import { Mission } from 'src/app/models/mission';
-import { PlayerMission } from 'src/app/models/playerMission';
 import { User } from 'src/app/models/user';
 import { Storage } from '@ionic/storage';
 
@@ -12,7 +11,7 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'polls.page.html',
   styleUrls: ['polls.page.scss']
 })
-export class PollsPage implements OnInit, AfterViewInit {
+export class PollsPage implements OnInit {
   @ViewChild(IonSlides) slides: IonSlides;
   polls: Poll[];
   missions: Mission[];
@@ -21,6 +20,7 @@ export class PollsPage implements OnInit, AfterViewInit {
   constructor(
     public events: Events,
     private storage: Storage,
+    public navCtrl: NavController,
     private authService: AuthService
     ) {
       this.events.subscribe('polls:created',
@@ -134,16 +134,30 @@ export class PollsPage implements OnInit, AfterViewInit {
               console.log(error);
           });
       });
+
+      this.events.subscribe('polls:returned',
+      (message) => {
+        this.onEnter();
+      },
+      () => {
+        console.log(this.polls);
+      });
   }
 
   ngOnInit() {
   }
 
-  ionViewDidEnter() {
+  ionViewWillEnter() {
     this.authService.retrievePolls();
     this.authService.retrieveMissions();
   }
 
-  ngAfterViewInit() {
+  onEnter() {
+    this.authService.retrievePolls();
+    this.authService.retrieveMissions();
+  }
+
+  showDetails (id: number) {
+    this.navCtrl.navigateForward('/details/' + id);
   }
 }

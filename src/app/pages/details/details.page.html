@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content padding [ngClass]="poll.color_class" (click)="closeKeyboard()">
-  <ion-slides #detailsSlider class="swiper-no-swiping">
+  <ion-slides #detailsSlider class="swiper-no-swiping" (ionSlideDidChange)="slideChanged()">
     <ion-slide class="swiper-no-swiping" *ngFor="let question of poll.questions; let i = index;">
       <ion-card>
         <ion-grid class='question-grid'>
@@ -65,15 +65,43 @@
           </ion-row>
 
           <ion-row *ngIf="question.type === 'rating'">
-
+            <ion-segment (ionChange)="segmentChanged($event, question, i)">
+              <ion-segment-button *ngFor="let element of [1,2,3,4,5,6,7,8,9,10]" value="{{element}}" [style.width.%]="10" [style.min-width.%]="10">
+                <ion-label>{{element}}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
           </ion-row>
 
-          <ion-row *ngIf="question.type === 'matrix'">
-
+          <ion-row *ngIf="question.type === 'checkbox'" class="answers-row-checkbox" [ngStyle]="{'height': (60*question.answers.length).toString() + 'px'}">
+            <ion-list>
+              <ion-item *ngFor="let answer of question.answers" class="checkbox-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}">
+                <ion-label>{{answer.text}}</ion-label>
+                <ion-checkbox slot="start" (ionChange)="updateAnswer(answer.id)" class="checkbox-item"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+            <ion-button class='open-question-button' (click)="saveCheckBoxAnswers(question, i)">
+              <ion-label *ngIf="i < poll.questions.length - 1; else lastQuestion">Next</ion-label>
+              <ng-template #lastQuestion>
+                <ion-label>Finish</ion-label>
+              </ng-template>
+            </ion-button>
           </ion-row>
 
-          <ion-row *ngIf="question.type === 'ranking'">
-
+          <ion-row *ngIf="question.type === 'ranking'" id="ranking-row">
+            <ion-list id="ranking-list">
+              <ion-reorder-group disabled="false" (ionItemReorder)="reorderItems($event, i)">
+                <ion-item *ngFor="let answer of question.answers" class="ranking-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}">
+                  <ion-label>{{answer.text}}</ion-label>
+                  <ion-reorder slot="end"></ion-reorder>
+                </ion-item>
+              </ion-reorder-group>
+            </ion-list>
+            <ion-button class='open-question-button' (click)="saveCheckBoxAnswers(question, i)">
+              <ion-label *ngIf="i < poll.questions.length - 1; else lastQuestion">Next</ion-label>
+              <ng-template #lastQuestion>
+                <ion-label>Finish</ion-label>
+              </ng-template>
+            </ion-button>
           </ion-row>
 
           <ion-row *ngIf="question.type === 'range'">

@@ -1,4 +1,4 @@
 //Change config.xml
 ionic cordova build --release android
 E:\punke\JDK12\bin\jarsigner.exe -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore uconduit.keystore platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk uConduit
-E:\punke\Projects\conduit>E:\punke\AppData\Local\build-tools\28.0.3\zipalign.exe -v 4 platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk platforms\android\app\build\outputs\apk\release\uConduit_1.190503.apk
+E:\punke\AppData\Local\build-tools\28.0.3\zipalign.exe -v 4 platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk platforms\android\app\build\outputs\apk\release\uConduit_1.190503.apk
