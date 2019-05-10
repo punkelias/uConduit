@@ -16,7 +16,8 @@ const routes: Routes = [
     loadChildren: './pages/details/details.module#DetailsPageModule',
     canActivate: [AuthGuard]
   },
-  { path: 'splash', loadChildren: './pages/splash/splash.module#SplashPageModule' }
+  { path: 'splash', loadChildren: './pages/splash/splash.module#SplashPageModule' },
+  { path: 'edit', loadChildren: './pages/edit/edit.module#EditPageModule', canActivate: [AuthGuard] }
 ];
 
 @NgModule({

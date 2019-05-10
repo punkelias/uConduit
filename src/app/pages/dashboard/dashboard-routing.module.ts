@@ -29,6 +29,10 @@ const routes: Routes = [
               {
                 path: '',
                 loadChildren: '../profile/profile.module#ProfilePageModule'
+              },
+              {
+                path: 'edit',
+                loadChildren: '../edit/edit.module#EditPageModule'
               }
             ]
         },

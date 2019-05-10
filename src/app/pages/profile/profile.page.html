@@ -10,6 +10,8 @@
     </ion-item>
     <ion-item id='profile-name'>
       <h1>{{user.first_name}} {{user.last_name}}</h1>
+
+      <ion-icon name="create" (click)="goToEdit()" id="edit-button"></ion-icon>
     </ion-item>
     <ion-item id='profile-resume'>
       <ion-item (click)="showPointsHistory()" id='points-button'>

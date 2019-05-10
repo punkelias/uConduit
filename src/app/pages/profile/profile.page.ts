@@ -198,4 +198,8 @@ export class ProfilePage {
       }
     );
   }
+
+  goToEdit() {
+    this.navCtrl.navigateForward('/edit');
+  }
 }

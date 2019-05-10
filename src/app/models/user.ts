@@ -18,4 +18,6 @@ export class User {
     bankerLevel: number;
     sharerLevel: number;
     completerLevel: number;
+    state_id: number;
+    city_id: number;
 }

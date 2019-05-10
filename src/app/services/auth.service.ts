@@ -460,4 +460,55 @@ export class AuthService {
     return (this.player.last_name && this.player.first_name && this.player.birthdate && this.player.email &&
       this.player.gender && this.player.icon_path && this.player.country_code && this.player.postal_code);
   }
+
+  edit(image: File, first_name: string, last_name: string, birthdate: string, gender: string, email: string, password: string,
+    country_code: string, state_id: string, city_id: string, postal_code: string
+    ) {
+    const headers = new HttpHeaders({
+      'session-token': this.token.session_token
+    });
+    if (gender === 'Male') {
+      gender = 'm';
+    } else {
+      gender = 'f';
+    }
+
+    const formData = new FormData();
+    if (first_name) {
+      formData.append('first_name', first_name);
+    }
+    if (last_name) {
+      formData.append('last_name', last_name);
+    }
+    if (birthdate) {
+      formData.append('birthdate', birthdate);
+    }
+    if (gender) {
+      formData.append('gender', gender);
+    }
+    if (email) {
+      formData.append('email', email);
+    }
+    if (password) {
+      formData.append('password', password);
+    }
+    console.log(image);
+    if (image) {
+      formData.append('image_file', image, image.name);
+    }
+    if (country_code) {
+      formData.append('country_code', country_code);
+    }
+    if (state_id) {
+      formData.append('state_id', state_id);
+    }
+    if (city_id) {
+      formData.append('city_id', city_id);
+    }
+    if (postal_code) {
+      formData.append('postal_code', postal_code);
+    }
+
+    return this.http.post(this.env.API_URL + 'player/profile/update', formData, { headers: headers });
+  }
 }

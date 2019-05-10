@@ -1,0 +1,42 @@
+* {
+    font-family: 'Lato-Regular';
+  }
+  
+  h1 {
+      text-align: center;
+      color: #D6D3D1;
+  }
+  
+  .error-message
+  {
+    color: red;
+    font-size: 14px;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+  
+  #separator {
+      height: 10%;
+  }
+  
+  .form-button {
+    margin-top: 40px;
+  }
+  
+  ion-content {
+      --ion-background-color: #1A1919;
+      --color: #D6D3D1;
+  }
+  
+  ion-input {
+      border-bottom: solid #D6D3D1 1px;
+  }
+  
+  ion-item {
+      --color: #D6D3D1;
+      --ion-background-color: transparent;
+  }
+
+  .back-button {
+      text-align: left;
+  }
