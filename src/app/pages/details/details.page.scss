@@ -255,3 +255,65 @@ ion-segment-button {
 #ranking-row, #ranking-list {
     width: 100%;
 }
+
+.scale-icon {
+    margin: 0;
+    padding: 0;
+}
+
+.scale-star {
+    width: 25px;
+    height: 25px;
+    padding: 0px;
+}
+
+.scale-question {
+    position: relative;
+    top: 25px;
+}
+
+.yesno-icon {
+    width: 60px;
+    height: 60px;
+}
+
+.headers-row {
+    position: relative;
+    display: block;
+    width: 100%;
+    font-size: 16px;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+}
+
+.headers-col {
+    width: 25%;
+    position: relative;
+    display: inline-block;
+}
+
+.matrix-answer-col {
+    width: 100%;
+}
+
+.matrix-radio-group {
+    width: 100%;
+    position: relative;
+    margin-left: auto;
+    left: auto;
+    display: block;
+    right: auto;
+    float: left;
+}
+
+.matrix-radio-group ion-col {
+    width: 25%;
+    position: relative;
+    display: inline-block;
+}
+
+.matrix-radio-group ion-col ion-item {
+    width: 100%;
+    position: relative;
+}

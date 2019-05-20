@@ -57,13 +57,12 @@ export class LoginPage implements OnInit {
   }
 
   loginCall(email: string, password: string) {
+    this.presentLoading();
     this.authService.login(email, password).subscribe(
       data => {
-        this.presentLoading();
         this.alertService.presentToast('Logged In', 'success');
       },
       error => {
-        this.presentLoading();
         console.log(error);
         if (error.error.error) {
           let errorMessage = error.error.error;

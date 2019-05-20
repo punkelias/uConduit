@@ -28,26 +28,34 @@
             </ion-col>
           </ion-row>
 
-          <ion-row *ngIf="(question.type === 'multiple' && question.answers.length == 2) || question.type === 'yesno'" class="answers-row">
-            <ion-card *ngIf="question.answers.length == 2">
+          <ion-row *ngIf="question.type === 'yesno'" class="answers-row">
+            <ion-card>
               <ion-col *ngFor="let answer of question.answers" class="answer-col">
-                <ion-button (click)="saveYesNoAnswer(question.id, answer.text, i)" [attr.clear]="true" fill="clear" [ngClass]="answer.classname">
-                  <ion-label [attr.clear]="true" fill="clear">{{answer.text}}</ion-label>
+                <ion-button no-padding class="no-margin no-padding" (click)="saveYesNoAnswer(question, answer.text, i)" [attr.clear]="true" fill="clear" [ngClass]="answer.classname">
+                  <!--<ion-label [attr.clear]="true" fill="clear">{{answer.text}}</ion-label>-->
+                  <ion-icon class="yesno-icon" *ngIf="answer.text == 'Yes'; else noanswer" name="checkmark" style="color: green;"></ion-icon>
+                  <ng-template #noanswer>
+                      <ion-icon class="yesno-icon" name="close" style="color: red;"></ion-icon>
+                  </ng-template>
                 </ion-button>
               </ion-col>
             </ion-card>
+
+            <ion-content padding>
+              <google-chart [data]="feedbackData"></google-chart>
+            </ion-content>
           </ion-row>
 
-          <ion-row *ngIf="question.type === 'multiple' && question.answers.length != 2" class="answers-row-multiple" [ngStyle]="{'height': (60*question.answers.length).toString() + 'px'}">
-            <ion-card *ngFor="let answer of question.answers" class="multiple-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}">
-              <ion-button [attr.clear]="true" fill="clear" expand="full" (click)="saveAnswer(question.id, answer.id.toString(), i)" [ngClass]="answer.classname">
+          <ion-row *ngIf="question.type === 'multiple'" class="answers-row-multiple" [ngStyle]="{'height': (60*question.answers.length).toString() + 'px'}">
+            <ion-card *ngFor="let answer of question.answers" class="multiple-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}" style="margin-bottom: 5%;">
+              <ion-button [attr.clear]="true" fill="clear" expand="full" (click)="saveAnswer(question, answer.id.toString(), i)" [ngClass]="answer.classname">
                 <ion-label [attr.clear]="true" fill="clear">{{answer.text}}</ion-label>
               </ion-button>
             </ion-card>
-          </ion-row>
 
-          <ion-row *ngIf="question.type === 'scale'">
-
+            <ion-content padding>
+              <google-chart [data]="feedbackData"></google-chart>
+            </ion-content>
           </ion-row>
 
           <ion-row *ngIf="question.type === 'dropdown'">
@@ -135,6 +143,56 @@
               </ng-template>
             </ion-button>
           </ion-row>
+
+          <ion-row class='scale-question-row' *ngIf="question.type === 'scale'">
+            <ion-item class='scale-question'>
+              <ion-item class='scale-icon-container' *ngFor="let number of  [0, 1, 2, 3, 4]">
+                <ion-button no-padding fill="clear" class="scale-icon full no-margin no-padding" (click)="saveAnswer(question, (number + 1).toString(), i)" *ngIf="openQuestions[i].value && number<openQuestions[i].value; else unselected">
+                    <ion-icon class="scale-star" name="star"></ion-icon>
+                </ion-button>
+                <ng-template #unselected>
+                  <ion-button no-padding fill="clear" class="scale-icon full no-margin no-padding" (click)="saveAnswer(question, (number + 1).toString(), i)">
+                    <ion-icon class="scale-star" name="star-outline"></ion-icon>
+                  </ion-button>
+                </ng-template>
+              </ion-item>
+            </ion-item>
+          </ion-row>
+
+          <ion-row class='scale-question-row' *ngIf="question.type === 'matrix'">
+            <ion-row class="headers-row">
+              <ion-col class="headers-col"></ion-col>
+              <ion-col class="headers-col">A lot</ion-col>
+              <ion-col class="headers-col">A little</ion-col>
+              <ion-col class="headers-col">Not at all</ion-col>
+            </ion-row>
+            <ion-list *ngFor="let answer of question.answers; let ia = index" class="matrix-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}">
+              <ion-radio-group class="matrix-radio-group">
+                <ion-col class="matrix-name-col">
+                  <ion-item>
+                    {{answer.text}}
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-radio (ionSelect)="updateMatrixAnswers(ia, 0)" class="matrix-value-col" value=0></ion-radio>
+                </ion-col>
+                <ion-col>
+                  <ion-radio (ionSelect)="updateMatrixAnswers(ia, 1)" class="matrix-value-col" value=1></ion-radio>
+                </ion-col>
+                <ion-col>
+                  <ion-radio (ionSelect)="updateMatrixAnswers(ia, 2)" class="matrix-value-col" value=2></ion-radio>
+                </ion-col>
+              </ion-radio-group>
+            </ion-list>
+
+            <ion-button class='open-question-button' (click)="saveMatrixAnswers(question, i)">
+              <ion-label *ngIf="i < poll.questions.length - 1; else lastQuestion">Next</ion-label>
+              <ng-template #lastQuestion>
+                <ion-label>Finish</ion-label>
+              </ng-template>
+            </ion-button>
+          </ion-row>
+          
         </ion-grid>
       </ion-card>
     </ion-slide>

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { ModalController, NavController, Events } from '@ionic/angular';
+import { ModalController, NavController, Events, LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
@@ -32,7 +32,7 @@ export class EditPage implements OnInit {
   step_two_form: FormGroup;
   step_three_form: FormGroup;
   genders: Array<string>;
-  fileToUpload: File;
+  fileToUpload: Blob;
   countryCode = '';
   stateCode: number;
 
@@ -41,6 +41,9 @@ export class EditPage implements OnInit {
   countries;
   states: Place[];
   cities: Place[];
+  loading;
+  fileBase64;
+  fileName: string;
 
   validation_messages = {
     'image': [
@@ -77,7 +80,8 @@ export class EditPage implements OnInit {
     private authService: AuthService,
     private navCtrl: NavController,
     private alertService: AlertService,
-    public events: Events
+    public events: Events,
+    public loadingController: LoadingController
   ) {
     this.events.subscribe('player:created',
       (player) => {
@@ -116,7 +120,7 @@ export class EditPage implements OnInit {
 
     this.step_one_form = this.formBuilder.group({
       email: new FormControl('', Validators.compose([
-        Validators.required,
+        Validators.nullValidator,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
       password: new FormControl('', Validators.compose([
@@ -126,17 +130,17 @@ export class EditPage implements OnInit {
 
     this.step_two_form = this.formBuilder.group({
       image: new FormControl('', Validators.nullValidator),
-      name: new FormControl('', Validators.required),
-      lastname: new FormControl('', Validators.required),
+      name: new FormControl('', Validators.nullValidator),
+      lastname: new FormControl('', Validators.nullValidator),
       gender: new FormControl(this.genders[0], Validators.nullValidator),
       birthdate: new FormControl('', Validators.nullValidator)
     });
 
     this.step_three_form = this.formBuilder.group({
-      countrycode: new FormControl('', Validators.required),
+      countrycode: new FormControl('', Validators.nullValidator),
       stateid: new FormControl('', Validators.nullValidator),
       cityid: new FormControl('', Validators.nullValidator),
-      postalcode: new FormControl('', Validators.required)
+      postalcode: new FormControl('', Validators.nullValidator)
     });
   }
 
@@ -189,7 +193,7 @@ export class EditPage implements OnInit {
 
   async selectImage() {
     const actionSheet = await this.actionSheetController.create({
-      header: 'Modify your album',
+      header: 'Choose a profile image',
       buttons: [
         {
           text: 'Load from Library',
@@ -239,7 +243,7 @@ export class EditPage implements OnInit {
     }
 
     this.camera.getPicture(options).then((imageData) => {
-      //this.fileToUpload = 'data:image/jpeg;base64,' + imageData;
+      this.fileBase64 = 'data:image/jpeg;base64,' + imageData;
       //this.fileToUpload = this.getSingleFile(imageData);
       // Naming the image
       const date = new Date().valueOf();
@@ -249,12 +253,12 @@ export class EditPage implements OnInit {
         text += possibleText.charAt(Math.floor(Math.random() *    possibleText.length));
       }
       // Replace extension according to your media type
-      const imageName = date + '.' + text + '.jpeg';
+      this.fileName = date + '.' + text + '.jpeg';
       // call method that creates a blob from dataUri
       const imageBlob = this.dataURItoBlob(imageData);
-      this.fileToUpload = new File([imageBlob], imageName, { type: 'image/jpeg' });
+      this.fileToUpload = imageBlob;
+      //this.fileToUpload = new File([imageBlob], imageName, { type: 'image/jpeg' });
       console.log(this.fileToUpload);
-      console.log(this.fileToUpload.name);
      }, (err) => {
       // Handle error
       console.log(err);
@@ -390,25 +394,14 @@ export class EditPage implements OnInit {
 
   edit() {
     console.log(this.fileToUpload);
-    this.authService.edit(this.fileToUpload, this.step_two_form.value.name, this.step_two_form.value.lastname,
+    this.presentLoading();
+    this.authService.edit(this.fileToUpload, this.fileName, this.step_two_form.value.name, this.step_two_form.value.lastname,
       this.step_two_form.value.birthdate, this.step_two_form.value.gender, this.step_one_form.value.email,
       this.step_one_form.value.password, this.step_three_form.value.countrycode, this.step_three_form.value.stateid,
       this.step_three_form.value.cityid, this.step_three_form.value.postalcode).subscribe(
       data => {
-        this.authService.login(this.step_one_form.value.email, this.step_one_form.value.password).subscribe(
-          logindata => {
-            this.navCtrl.navigateRoot('/profile');
-            console.log(logindata);
-          },
-          (error) => {
-            console.log(error);
-            this.alertService.presentToast(error.error, 'error');
-          },
-          () => {
-            this.navCtrl.navigateRoot('/profile');
-          }
-        );
-        this.alertService.presentToast(data['message'], 'success');
+        this.alertService.presentToast('Profile edited', 'success');
+        this.goBack();
       },
       error => {
         console.log(error);
@@ -476,5 +469,16 @@ export class EditPage implements OnInit {
 
   goBack() {
     this.navCtrl.navigateRoot('/dashboard/dashboard/profile');
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Please wait...',
+      duration: 3000
+    });
+
+    await this.loading.present();
+
+    const { role, data } = await this.loading.onDidDismiss();
   }
 }

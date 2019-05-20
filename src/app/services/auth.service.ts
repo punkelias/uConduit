@@ -11,6 +11,7 @@ import { Place } from '../models/place';
 import { Answer } from '../models/answer';
 import { Mission } from '../models/mission';
 import { PlayerMission } from '../models/playerMission';
+import { Question } from '../models/question';
 
 @Injectable({
   providedIn: 'root'
@@ -122,8 +123,8 @@ export class AuthService {
     );
   }
 
-  register(image: File, first_name: string, last_name: string, birthdate: string, gender: string, email: string, password: string,
-    country_code: string, state_id: string, city_id: string, postal_code: string
+  register(image: Blob, image_name: string, first_name: string, last_name: string, birthdate: string, gender: string,
+    email: string, password: string, country_code: string, state_id: string, city_id: string, postal_code: string
     ) {
     if (gender === 'Male') {
       gender = 'm';
@@ -140,7 +141,7 @@ export class AuthService {
     formData.append('password', password);
     console.log(image);
     if (image) {
-      formData.append('image_file', image, image.name);
+      formData.append('image_file', image, image_name);
     }
     formData.append('country_code', country_code);
     if (state_id) {
@@ -221,9 +222,9 @@ export class AuthService {
               } else if (element.color === '#A77BFF') {
                 element.color_class = 'color-5';
               }
-
               for (const question of element.questions) {
                 if (question.type === 'yesno') {
+                  if (question.answers instanceof Array) {
                   const answerYes = new Answer();
                   answerYes.text = 'Yes';
                   const answerNo = new Answer();
@@ -231,6 +232,7 @@ export class AuthService {
 
                   question.answers.push(answerYes);
                   question.answers.push(answerNo);
+                  }
                 }
               }
             });
@@ -461,8 +463,8 @@ export class AuthService {
       this.player.gender && this.player.icon_path && this.player.country_code && this.player.postal_code);
   }
 
-  edit(image: File, first_name: string, last_name: string, birthdate: string, gender: string, email: string, password: string,
-    country_code: string, state_id: string, city_id: string, postal_code: string
+  edit(image: Blob, image_name: string, first_name: string, last_name: string, birthdate: string, gender: string,
+    email: string, password: string, country_code: string, state_id: string, city_id: string, postal_code: string
     ) {
     const headers = new HttpHeaders({
       'session-token': this.token.session_token
@@ -473,42 +475,69 @@ export class AuthService {
       gender = 'f';
     }
 
+    if (!first_name) {
+      first_name = this.player.first_name;
+    }
+
+    if (!last_name) {
+      last_name = this.player.last_name;
+    }
+
+    if (!birthdate) {
+      birthdate = this.player.birthdate;
+    }
+
+    if (!gender) {
+      gender = this.player.gender;
+    }
+
+    if (!email) {
+      email = this.player.email;
+    }
+
+    if (!country_code) {
+      country_code = this.player.country_code;
+    }
+
+    if (!state_id) {
+      state_id = this.player.state_id.toString();
+    }
+
+    if (!city_id) {
+      city_id = this.player.city_id.toString();
+    }
+
+    if (!postal_code) {
+      postal_code = this.player.postal_code;
+    }
+
     const formData = new FormData();
-    if (first_name) {
-      formData.append('first_name', first_name);
-    }
-    if (last_name) {
-      formData.append('last_name', last_name);
-    }
-    if (birthdate) {
-      formData.append('birthdate', birthdate);
-    }
-    if (gender) {
-      formData.append('gender', gender);
-    }
-    if (email) {
-      formData.append('email', email);
-    }
+    formData.append('first_name', first_name);
+    formData.append('last_name', last_name);
+    formData.append('birthdate', birthdate);
+    formData.append('gender', gender);
+    formData.append('email', email);
     if (password) {
       formData.append('password', password);
     }
     console.log(image);
     if (image) {
-      formData.append('image_file', image, image.name);
+      formData.append('image_file', image, image_name);
     }
-    if (country_code) {
-      formData.append('country_code', country_code);
-    }
-    if (state_id) {
-      formData.append('state_id', state_id);
-    }
-    if (city_id) {
-      formData.append('city_id', city_id);
-    }
-    if (postal_code) {
-      formData.append('postal_code', postal_code);
-    }
+    formData.append('country_code', country_code);
+    formData.append('state_id', state_id);
+    formData.append('city_id', city_id);
+    formData.append('postal_code', postal_code);
 
-    return this.http.post(this.env.API_URL + 'player/profile/update', formData, { headers: headers });
+    return this.http.post<any>(this.env.API_URL + 'player/profile/update', formData, { headers: headers })
+    .pipe(
+      map(
+        data => {
+          console.log(data);
+          this.player = data.player;
+          this.events.publish('player:updated', (this.player));
+        }
+      )
+    );
   }
 }

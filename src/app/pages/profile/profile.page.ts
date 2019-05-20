@@ -55,6 +55,15 @@ export class ProfilePage {
       () => {
         console.log(this.redeemedHistory);
     });
+
+    this.events.subscribe('player:updated',
+      (player) => {
+        this.user = player;
+      },
+      () => {
+        console.log(this.user);
+      }
+    );
   }
 
   ionViewDidEnter() {

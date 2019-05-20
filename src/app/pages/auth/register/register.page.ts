@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { ModalController, NavController, Events } from '@ionic/angular';
+import { ModalController, NavController, Events, LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
@@ -30,9 +30,12 @@ export class RegisterPage implements OnInit {
   step_two_form: FormGroup;
   step_three_form: FormGroup;
   genders: Array<string>;
-  fileToUpload: File;
+  fileToUpload: Blob;
   countryCode = '';
   stateCode: number;
+  loading;
+  fileBase64;
+  fileName: string;
 
   public submitAttempt = false;
 
@@ -79,7 +82,8 @@ export class RegisterPage implements OnInit {
     private authService: AuthService,
     private navCtrl: NavController,
     private alertService: AlertService,
-    public events: Events
+    public events: Events,
+    public loadingController: LoadingController
   ) {
     this.events.subscribe('states:created',
       (states) => {
@@ -184,7 +188,7 @@ export class RegisterPage implements OnInit {
 
   async selectImage() {
     const actionSheet = await this.actionSheetController.create({
-      header: 'Modify your album',
+      header: 'Choose a profile image',
       buttons: [
         {
           text: 'Load from Library',
@@ -234,7 +238,7 @@ export class RegisterPage implements OnInit {
     }
 
     this.camera.getPicture(options).then((imageData) => {
-      //this.fileToUpload = 'data:image/jpeg;base64,' + imageData;
+      this.fileBase64 = 'data:image/jpeg;base64,' + imageData;
       //this.fileToUpload = this.getSingleFile(imageData);
       // Naming the image
       const date = new Date().valueOf();
@@ -244,12 +248,12 @@ export class RegisterPage implements OnInit {
         text += possibleText.charAt(Math.floor(Math.random() *    possibleText.length));
       }
       // Replace extension according to your media type
-      const imageName = date + '.' + text + '.jpeg';
+      this.fileName = date + '.' + text + '.jpeg';
       // call method that creates a blob from dataUri
       const imageBlob = this.dataURItoBlob(imageData);
-      this.fileToUpload = new File([imageBlob], imageName, { type: 'image/jpeg' });
+      this.fileToUpload = imageBlob;
+      //this.fileToUpload = new File([imageBlob], imageName, { type: 'image/jpeg' });
       console.log(this.fileToUpload);
-      console.log(this.fileToUpload.name);
      }, (err) => {
       // Handle error
       console.log(err);
@@ -385,7 +389,8 @@ export class RegisterPage implements OnInit {
 
   register() {
     console.log(this.fileToUpload);
-    this.authService.register(this.fileToUpload, this.step_two_form.value.name, this.step_two_form.value.lastname,
+    this.presentLoading();
+    this.authService.register(this.fileToUpload, this.fileName, this.step_two_form.value.name, this.step_two_form.value.lastname,
       this.step_two_form.value.birthdate, this.step_two_form.value.gender, this.step_one_form.value.email,
       this.step_one_form.value.password, this.step_three_form.value.countrycode, this.step_three_form.value.stateid,
       this.step_three_form.value.cityid, this.step_three_form.value.postalcode).subscribe(
@@ -404,6 +409,7 @@ export class RegisterPage implements OnInit {
           }
         );
         this.alertService.presentToast(data['message'], 'success');
+        console.log(data);
       },
       error => {
         console.log(error);
@@ -467,5 +473,16 @@ export class RegisterPage implements OnInit {
       };
       reader.readAsArrayBuffer(cordovaFile);
     });
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Please wait...',
+      duration: 3000
+    });
+
+    await this.loading.present();
+
+    const { role, data } = await this.loading.onDidDismiss();
   }
 }

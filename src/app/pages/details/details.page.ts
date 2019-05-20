@@ -24,6 +24,8 @@ export class DetailsPage implements OnInit {
   missions: Mission[];
   player: User;
   checkBoxAnswers: number[] = [];
+  feedbackData;
+  matrixAnswers: any[] = [];
 
   constructor(
     private keyboard: Keyboard,
@@ -56,53 +58,55 @@ export class DetailsPage implements OnInit {
     this.navCtrl.pop();
   }
 
-  saveAnswer (questionId: number, value: string, index: number) {
-    for (const question of this.poll.questions) {
-      if (question.id == questionId) {
-        for (const answer of question.answers) {
-          if (answer.id.toString() === value) {
-            answer.classname = 'chosen';
-          } else {
-            answer.classname = 'hide';
-          }
-        }
+  saveAnswer (question: Question, value: string, index: number) {
+    for (const answer of question.answers) {
+      if (answer.id.toString() === value) {
+        answer.classname = 'chosen';
+      } else {
+        answer.classname = 'hide';
       }
     }
 
+    this.openQuestions[index].value = parseInt(value, 10);
+
     const playerAnswer = new PlayerAnswer();
     playerAnswer.poll_id = this.poll.id;
-    playerAnswer.question_id = questionId;
+    playerAnswer.question_id = question.id;
     playerAnswer.value = value;
     this.answers.push(playerAnswer);
 
+    if (this.poll.show_crow_answers) {
+      this.createChart(question);
+    }
+
     if (index < this.poll.questions.length - 1) {
-      this.slides.slideNext(1500);
+      this.slides.slideNext(3000);
     } else {
       this.sendAnswers();
     }
   }
 
-  saveYesNoAnswer (questionId: number, value: string, index: number) {
-    for (const question of this.poll.questions) {
-      if (question.id == questionId) {
-        for (const answer of question.answers) {
-          if (answer.text === value) {
-            answer.classname = 'chosen';
-          } else {
-            answer.classname = 'hide';
-          }
-        }
+  saveYesNoAnswer (question: Question, value: string, index: number) {
+    for (const answer of question.answers) {
+      if (answer.text === value) {
+        answer.classname = 'chosen';
+      } else {
+        answer.classname = 'hide';
       }
     }
 
     const playerAnswer = new PlayerAnswer();
     playerAnswer.poll_id = this.poll.id;
-    playerAnswer.question_id = questionId;
+    playerAnswer.question_id = question.id;
     playerAnswer.value = value;
     this.answers.push(playerAnswer);
 
+    if (this.poll.show_crow_answers) {
+      this.createChart(question);
+    }
+
     if (index < this.poll.questions.length - 1) {
-      this.slides.slideNext(1500);
+      this.slides.slideNext(3000);
     } else {
       this.sendAnswers();
     }
@@ -300,7 +304,49 @@ export class DetailsPage implements OnInit {
             this.checkBoxAnswers.push(answer.id);
           }
         }
+
+        if (this.poll.questions[index].type === 'matrix') {
+          for (const answer of this.poll.questions[index].answers) {
+            this.matrixAnswers.push({id: answer.id, value: 0});
+          }
+        }
       }
    });
+  }
+
+  createChart(question: Question) {
+    this.feedbackData = {
+      chartType: 'PieChart',
+      dataTable: [
+        ['Answer', 'Percent']
+      ],
+      options: {
+      'width': 400,
+      'height': 300
+      }
+    };
+
+    for (const answer of question.answers) {
+      this.feedbackData.dataTable.push([answer.text, answer.feedback]);
+    }
+  }
+
+  updateMatrixAnswers (index: number, value: number) {
+    this.matrixAnswers[index].value = value;
+  }
+
+  saveMatrixAnswers (question: Question, index: number) {
+    const playerAnswer = new PlayerAnswer();
+    playerAnswer.poll_id = this.poll.id;
+    playerAnswer.question_id = question.id;
+    playerAnswer.value = JSON.stringify(this.matrixAnswers);
+    this.answers.push(playerAnswer);
+    this.matrixAnswers = [];
+    this.matrixAnswers.length = 0;
+    if (index < this.poll.questions.length - 1) {
+      this.slides.slideNext(1500);
+    } else {
+      this.sendAnswers();
+    }
   }
 }

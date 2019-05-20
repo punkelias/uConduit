@@ -44,7 +44,7 @@
   </ion-card>
 
   <ion-title id='badges-card-title'>Badges Earned</ion-title>
-  <ion-card id='badges-card'>
+  <ion-card id='badges-card' *ngIf="user">
     <ion-grid id='badges-grid'>
       <ion-row class='badges-grid-row'>
         <ion-col class='badges-grid-col'>
