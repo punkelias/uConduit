@@ -4,6 +4,7 @@
   
   ion-content {
       --color: white;
+      --ion-background-color: var(--mainColor);
   }
 
   ion-content.color-1 {
@@ -91,6 +92,8 @@ ion-grid {
 
 .answer-col {
     padding: 0;
+    margin-left: 3%;
+    left: -3%;
 }
 
 .answer-col ion-button {
@@ -316,4 +319,16 @@ ion-segment-button {
 .matrix-radio-group ion-col ion-item {
     width: 100%;
     position: relative;
+}
+
+.ranking-answer-col {
+    background-color: white;
+    color: var(--mainColor);
+}
+
+.answers-row-multiple {
+    width: 85%;
+    margin: 0 auto;
+    position: relative;
+    top: 3%;
 }

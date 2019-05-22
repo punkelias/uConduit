@@ -40,15 +40,7 @@ export class PollsPage implements OnInit {
 
           if (this.authService.checkUserInfo()) {
             // Complete profile mission
-            this.authService.addProgress('Completer').subscribe(
-              data => {
-                console.log(data);
-              },
-              error => {
-              },
-              () => {
-              }
-            );
+            this.authService.addProgress('Completer');
           }
 
           // Consecutive logins mission

@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding [ngClass]="poll.color_class" (click)="closeKeyboard()">
+<ion-content padding [ngStyle]="{'--ion-background-color': poll.color}" (click)="closeKeyboard()">
   <ion-slides #detailsSlider class="swiper-no-swiping" (ionSlideDidChange)="slideChanged()">
     <ion-slide class="swiper-no-swiping" *ngFor="let question of poll.questions; let i = index;">
       <ion-card>
@@ -33,9 +33,9 @@
               <ion-col *ngFor="let answer of question.answers" class="answer-col">
                 <ion-button no-padding class="no-margin no-padding" (click)="saveYesNoAnswer(question, answer.text, i)" [attr.clear]="true" fill="clear" [ngClass]="answer.classname">
                   <!--<ion-label [attr.clear]="true" fill="clear">{{answer.text}}</ion-label>-->
-                  <ion-icon class="yesno-icon" *ngIf="answer.text == 'Yes'; else noanswer" name="checkmark" style="color: green;"></ion-icon>
+                  <ion-icon class="yesno-icon" *ngIf="answer.text == 'Yes'; else noanswer" name="checkmark" style="color: #9dc25c;"></ion-icon>
                   <ng-template #noanswer>
-                      <ion-icon class="yesno-icon" name="close" style="color: red;"></ion-icon>
+                      <ion-icon class="yesno-icon" name="close" style="color: #cb4a41;"></ion-icon>
                   </ng-template>
                 </ion-button>
               </ion-col>
@@ -46,8 +46,8 @@
             </ion-content>
           </ion-row>
 
-          <ion-row *ngIf="question.type === 'multiple'" class="answers-row-multiple" [ngStyle]="{'height': (60*question.answers.length).toString() + 'px'}">
-            <ion-card *ngFor="let answer of question.answers" class="multiple-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}" style="margin-bottom: 5%;">
+          <ion-row *ngIf="question.type === 'multiple'" class="answers-row-multiple" [ngStyle]="{'height': (70*question.answers.length).toString() + 'px'}">
+            <ion-card *ngFor="let answer of question.answers" class="multiple-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}" style="margin-bottom: 4%;">
               <ion-button [attr.clear]="true" fill="clear" expand="full" (click)="saveAnswer(question, answer.id.toString(), i)" [ngClass]="answer.classname">
                 <ion-label [attr.clear]="true" fill="clear">{{answer.text}}</ion-label>
               </ion-button>
@@ -98,7 +98,7 @@
           <ion-row *ngIf="question.type === 'ranking'" id="ranking-row">
             <ion-list id="ranking-list">
               <ion-reorder-group disabled="false" (ionItemReorder)="reorderItems($event, i)">
-                <ion-item *ngFor="let answer of question.answers" class="ranking-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}">
+                <ion-item *ngFor="let answer of question.answers" class="ranking-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%', 'margin-bottom': '2.5%'}">
                   <ion-label>{{answer.text}}</ion-label>
                   <ion-reorder slot="end"></ion-reorder>
                 </ion-item>

@@ -37,9 +37,18 @@ ion-item {
 }
 
 #profile-pic {
-  width: 75px;
-  height: 75px;
+  width: auto;
+  height: 70%;
   margin: 0 auto;
+  top: -14%;
+  position: relative;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 50%;
 }
 
 #profile-name {
@@ -207,67 +216,67 @@ h1 {
 }
 
 #completer-image.level-1 {
-  content: url('../../../assets/images/completer_level1_badge.png');
+  content: url('../../../assets/images/completer_level1_badge.svg');
   opacity: 1;
 }
 
 #visitor-image.level-1 {
-  content: url('../../../assets/images/visitor_level1_badge.png');
+  content: url('../../../assets/images/visitor_level1_badge.svg');
   opacity: 1;
 }
 
 #visitor-image.level-2 {
-  content: url('../../../assets/images/visitor_level2_badge.png');
+  content: url('../../../assets/images/visitor_level2_badge.svg');
   opacity: 1;
 }
 
 #visitor-image.level-3 {
-  content: url('../../../assets/images/visitor_level3_badge.png');
+  content: url('../../../assets/images/visitor_level3_badge.svg');
   opacity: 1;
 }
 
 #visitor-image.level-4 {
-  content: url('../../../assets/images/visitor_level4_badge.png');
+  content: url('../../../assets/images/visitor_level4_badge.svg');
   opacity: 1;
 }
 
 #sharer-image.level-1 {
-  content: url('../../../assets/images/sharer_level1_badge.png');
+  content: url('../../../assets/images/sharer_level1_badge.svg');
   opacity: 1;
 }
 
 #sharer-image.level-2 {
-  content: url('../../../assets/images/sharer_level2_badge.png');
+  content: url('../../../assets/images/sharer_level2_badge.svg');
   opacity: 1;
 }
 
 #sharer-image.level-3 {
-  content: url('../../../assets/images/sharer_level3_badge.png');
+  content: url('../../../assets/images/sharer_level3_badge.svg');
   opacity: 1;
 }
 
 #sharer-image.level-4 {
-  content: url('../../../assets/images/sharer_level4_badge.png');
+  content: url('../../../assets/images/sharer_level4_badge.svg');
   opacity: 1;
 }
 
 #banker-image.level-1 {
-  content: url('../../../assets/images/banker_level1_badge.png');
+  content: url('../../../assets/images/banker_level1_badge.svg');
   opacity: 1;
 }
 
 #banker-image.level-2 {
-  content: url('../../../assets/images/banker_level2_badge.png');
+  content: url('../../../assets/images/banker_level2_badge.svg');
   opacity: 1;
 }
 
 #banker-image.level-3 {
-  content: url('../../../assets/images/banker_level3_badge.png');
+  content: url('../../../assets/images/banker_level3_badge.svg');
   opacity: 1;
 }
 
 #banker-image.level-4 {
-  content: url('../../../assets/images/banker_level4_badge.png');
+  content: url('../../../assets/images/banker_level4_badge.svg');
   opacity: 1;
 }
 

@@ -52,6 +52,8 @@ export class DetailsPage implements OnInit {
   ionViewDidEnter() {
     this.player = this.authService.user();
     this.missions = this.authService.getMissions();
+    const themeWrapper = document.querySelector('body');
+    themeWrapper.style.setProperty('--mainColor', this.poll.color);
   }
 
   GoBack() {

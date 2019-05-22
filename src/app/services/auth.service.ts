@@ -11,7 +11,6 @@ import { Place } from '../models/place';
 import { Answer } from '../models/answer';
 import { Mission } from '../models/mission';
 import { PlayerMission } from '../models/playerMission';
-import { Question } from '../models/question';
 
 @Injectable({
   providedIn: 'root'
