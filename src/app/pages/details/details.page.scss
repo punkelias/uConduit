@@ -4,31 +4,7 @@
   
   ion-content {
       --color: white;
-      --ion-background-color: var(--mainColor);
-  }
-
-  ion-content.color-1 {
-      --ion-background-color: #7bedff;
-  }
-
-  ion-content.color-2 {
-      --ion-background-color: #ff7b91;
-  }
-
-  ion-content.color-3 {
-      --ion-background-color: #2be8a6;
-  }
-
-  ion-content.color-4 {
-      --ion-background-color: #fff454;
-  }
-
-  ion-content.color-5 {
-      --ion-background-color: #a77bff;
-  }
-
-  ion-content.color-6 {
-      --ion-background-color: #ffbb7b;
+      --ion-background-color: var(--bgColor);
   }
   
   ion-item {
@@ -157,6 +133,7 @@ ion-grid {
     position: absolute;
     bottom: 5%;
     left: 5%;
+    --background: var(--mainColor);
 }
 
 .open-question-button ion-label {
@@ -167,7 +144,7 @@ ion-grid {
     width: 100%;
     text-align: center;
     --border-color: transparent;
-    color: black;
+    color: var(--mainColor);
 }
 
 .range-value {
@@ -176,7 +153,7 @@ ion-grid {
 }
 
 ion-range ion-label {
-    --color: black !important;
+    --color: var(--mainColor) !important;
 }
 
 .dropdown-question {
@@ -207,7 +184,7 @@ ion-range ion-label {
 
 .multiple-answer-col ion-button {
     width: 100%;
-    color: #52AACF;
+    color: var(--mainColor);
     background: #ffffff;
     --background: transparent;
     --ion-background-color: transparent;
@@ -233,7 +210,7 @@ ion-item {
 .checkbox-item {
     --background: #ffffff;
     --border-width: 0px;
-    --background-checked: #12658F;
+    --background-checked: var(--mainColor);
 }
 
 ion-segment {
@@ -331,4 +308,40 @@ ion-segment-button {
     margin: 0 auto;
     position: relative;
     top: 3%;
+}
+
+.open-question-button button {
+    background: var(--mainColor);
+}
+
+.back-button ion-button {
+    color: var(--mainColor);
+}
+
+.scrolldiv[scrollx=true], div[scrolly=true] {
+    position: relative;
+    overflow: hidden;
+  
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  
+  .scrolldiv[scrollx=true] {
+    overflow-x: auto;
+  }
+  
+  .scrolldiv[scrolly=true] {
+    overflow-y: auto;
+  }
+
+  .scrolldiv {
+    width: 100%;
+    height: 325px;
+}
+
+.range-slider ion-range {
+    --bar-background: var(--mainColor);
+    --bar-background-active: white;
+    color: var(--mainColor);
 }

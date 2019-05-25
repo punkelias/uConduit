@@ -54,6 +54,7 @@ export class DetailsPage implements OnInit {
     this.missions = this.authService.getMissions();
     const themeWrapper = document.querySelector('body');
     themeWrapper.style.setProperty('--mainColor', this.poll.color);
+    themeWrapper.style.setProperty('--bgColor', this.poll.background_color);
   }
 
   GoBack() {
@@ -308,8 +309,10 @@ export class DetailsPage implements OnInit {
         }
 
         if (this.poll.questions[index].type === 'matrix') {
+          console.log('entra');
           for (const answer of this.poll.questions[index].answers) {
             this.matrixAnswers.push({id: answer.id, value: 0});
+            console.log(this.matrixAnswers.length);
           }
         }
       }
@@ -328,8 +331,15 @@ export class DetailsPage implements OnInit {
       }
     };
 
+    let totalAnswered = 0;
     for (const answer of question.answers) {
-      this.feedbackData.dataTable.push([answer.text, answer.feedback]);
+      totalAnswered += answer.feedback;
+    }
+
+    if (totalAnswered > 0) {
+      for (const answer of question.answers) {
+        this.feedbackData.dataTable.push([answer.text, answer.feedback / totalAnswered]);
+      }
     }
   }
 

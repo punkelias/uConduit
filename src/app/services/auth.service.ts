@@ -11,6 +11,7 @@ import { Place } from '../models/place';
 import { Answer } from '../models/answer';
 import { Mission } from '../models/mission';
 import { PlayerMission } from '../models/playerMission';
+import { elementEnd } from '@angular/core/src/render3';
 
 @Injectable({
   providedIn: 'root'
@@ -138,7 +139,6 @@ export class AuthService {
     formData.append('gender', gender);
     formData.append('email', email);
     formData.append('password', password);
-    console.log(image);
     if (image) {
       formData.append('image_file', image, image_name);
     }
@@ -208,19 +208,11 @@ export class AuthService {
         .subscribe((response) => {
             response.polls.forEach(element => {
               element.cover = this.env.API_URL + element.cover_path;
-              element.color_class = 'color-6';
 
-              if (element.color === '#7BEDFF') {
-                element.color_class = 'color-1';
-              } else if (element.color === '#FF7B91') {
-                element.color_class = 'color-2';
-              } else if (element.color === '#2BE8A6') {
-                element.color_class = 'color-3';
-              } else if (element.color === '#FFF454') {
-                element.color_class = 'color-4';
-              } else if (element.color === '#A77BFF') {
-                element.color_class = 'color-5';
+              if (!element.background_color) {
+                element.background_color = element.color;
               }
+
               for (const question of element.questions) {
                 if (question.type === 'yesno') {
                   if (question.answers instanceof Array) {
@@ -306,8 +298,7 @@ export class AuthService {
     const headers = new HttpHeaders({
       'session-token': this.token.session_token
     });
-    console.log(headers);
-    console.log(answers);
+
     return this.http.post<any>(this.env.API_URL + 'player/poll/save/answers',
       { answers: answers, poll_id: poll_id },
       { headers: headers }
@@ -324,7 +315,6 @@ export class AuthService {
   retrieveStates() {
     return this.http.get<any>(this.env.API_URL + 'state/all')
     .subscribe((response) => {
-        console.log(response);
         this.states = response.states;
         this.events.publish('states:created', (this.states));
     });
@@ -337,7 +327,6 @@ export class AuthService {
   retrieveCities(stateCode: number) {
     return this.http.get<any>(this.env.API_URL + 'state/' + stateCode +  '/cities')
     .subscribe((response) => {
-        console.log(response);
         this.cities = response.cities;
         this.events.publish('cities:created', (this.cities));
     });
@@ -519,7 +508,6 @@ export class AuthService {
     if (password) {
       formData.append('password', password);
     }
-    console.log(image);
     if (image) {
       formData.append('image_file', image, image_name);
     }

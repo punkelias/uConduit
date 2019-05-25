@@ -12,5 +12,5 @@ export class Poll {
     created_at: string;
     cover: string;
     color: string;
-    color_class: string;
+    background_color: string;
 }

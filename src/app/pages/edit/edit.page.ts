@@ -258,7 +258,6 @@ export class EditPage implements OnInit {
       const imageBlob = this.dataURItoBlob(imageData);
       this.fileToUpload = imageBlob;
       //this.fileToUpload = new File([imageBlob], imageName, { type: 'image/jpeg' });
-      console.log(this.fileToUpload);
      }, (err) => {
       // Handle error
       console.log(err);
@@ -393,7 +392,6 @@ export class EditPage implements OnInit {
   }
 
   edit() {
-    console.log(this.fileToUpload);
     this.presentLoading();
     this.authService.edit(this.fileToUpload, this.fileName, this.step_two_form.value.name, this.step_two_form.value.lastname,
       this.step_two_form.value.birthdate, this.step_two_form.value.gender, this.step_one_form.value.email,

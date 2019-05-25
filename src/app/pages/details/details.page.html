@@ -166,24 +166,26 @@
               <ion-col class="headers-col">A little</ion-col>
               <ion-col class="headers-col">Not at all</ion-col>
             </ion-row>
-            <ion-list *ngFor="let answer of question.answers; let ia = index" class="matrix-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}">
-              <ion-radio-group class="matrix-radio-group">
-                <ion-col class="matrix-name-col">
-                  <ion-item>
-                    {{answer.text}}
-                  </ion-item>
-                </ion-col>
-                <ion-col>
-                  <ion-radio (ionSelect)="updateMatrixAnswers(ia, 0)" class="matrix-value-col" value=0></ion-radio>
-                </ion-col>
-                <ion-col>
-                  <ion-radio (ionSelect)="updateMatrixAnswers(ia, 1)" class="matrix-value-col" value=1></ion-radio>
-                </ion-col>
-                <ion-col>
-                  <ion-radio (ionSelect)="updateMatrixAnswers(ia, 2)" class="matrix-value-col" value=2></ion-radio>
-                </ion-col>
-              </ion-radio-group>
-            </ion-list>
+            <div class="scrolldiv" scrolly=true>
+              <ion-list *ngFor="let answer of question.answers; let ia = index" class="matrix-answer-col">
+                <ion-radio-group class="matrix-radio-group">
+                  <ion-col class="matrix-name-col">
+                    <ion-item>
+                      {{answer.text}}
+                    </ion-item>
+                  </ion-col>
+                  <ion-col>
+                    <ion-radio (ionSelect)="updateMatrixAnswers(ia, 0)" class="matrix-value-col" value=0></ion-radio>
+                  </ion-col>
+                  <ion-col>
+                    <ion-radio (ionSelect)="updateMatrixAnswers(ia, 1)" class="matrix-value-col" value=1></ion-radio>
+                  </ion-col>
+                  <ion-col>
+                    <ion-radio (ionSelect)="updateMatrixAnswers(ia, 2)" class="matrix-value-col" value=2></ion-radio>
+                  </ion-col>
+                </ion-radio-group>
+              </ion-list>
+            </div>
 
             <ion-button class='open-question-button' (click)="saveMatrixAnswers(question, i)">
               <ion-label *ngIf="i < poll.questions.length - 1; else lastQuestion">Next</ion-label>
