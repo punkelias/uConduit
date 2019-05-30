@@ -103,8 +103,8 @@ ion-grid {
 }
 
 .multiple-answer-col ion-button.hide {
-    visibility: hidden;
-    opacity: 0;
+    /*visibility: hidden;*/
+    opacity: 0.5;
     transition: visibility 0s 1s, opacity 1s linear;
 }
 
@@ -224,12 +224,9 @@ ion-segment-button {
     --margin-start: 0px;
     --padding-end: 0px;
     --padding-start: 0px;
-    --background: #1A1919;
+    --background: var(--mainColor);
     color: white;
-}
-
-.segment-button-indicator {
-    background-color: white;
+    --indicator-color-checked: var(--mainColor);
 }
 
 #ranking-row, #ranking-list {
@@ -263,14 +260,20 @@ ion-segment-button {
     width: 100%;
     font-size: 16px;
     text-align: center;
-    color: black;
+    color: var(--mainColor);
     font-weight: bold;
+}
+.headers-col:first-child {
+    width: 40%;
+    position: relative;
+    display: inline-block;
 }
 
 .headers-col {
-    width: 25%;
+    width: 20%;
     position: relative;
     display: inline-block;
+    font-size: 14px;
 }
 
 .matrix-answer-col {
@@ -287,8 +290,14 @@ ion-segment-button {
     float: left;
 }
 
+.matrix-radio-group ion-col:first-child {
+    width: 40%;
+    position: relative;
+    display: inline-block;
+}
+
 .matrix-radio-group ion-col {
-    width: 25%;
+    width: 20%;
     position: relative;
     display: inline-block;
 }
@@ -296,6 +305,7 @@ ion-segment-button {
 .matrix-radio-group ion-col ion-item {
     width: 100%;
     position: relative;
+    text-align: 14px;
 }
 
 .ranking-answer-col {
@@ -344,4 +354,81 @@ ion-segment-button {
     --bar-background: var(--mainColor);
     --bar-background-active: white;
     color: var(--mainColor);
+}
+
+rect {
+    fill: transparent !important;
+}
+
+.yesno-chart {
+    position: relative;
+    top: 10%;
+}
+
+.multiple-chart {
+    position: absolute;
+    height: 100%;
+    left: 0px;
+    background: var(--bgColor);
+    z-index: -5;
+    text-align: right;
+}
+
+.multiple-chart ion-label {
+    position: relative;
+    top: 30%;
+}
+
+.multiple-question-button {
+    bottom: 20px;
+    position: fixed;
+}
+
+.answers-row-checkbox ion-list {
+    width: 100%;
+}
+
+.checkbox-answer-col {
+    width: 100%;
+    margin-bottom: 3%;
+}
+
+.checkbox-chart {
+    position: absolute;
+    height: 100%;
+    left: 0px;
+    background: var(--mainColor);
+    z-index: -5;
+    text-align: right;
+}
+
+.checkbox-chart ion-label {
+    position: relative;
+    top: 30%;
+}
+
+.scale-icon button {
+    overflow: visible;
+}
+
+.answers-average {
+    position: absolute;
+    top: -5px;
+}
+
+.rating-average {
+    position: absolute;
+    top: -15px;
+    color: #ffffff;
+}
+
+.range-average {
+    position: absolute;
+}
+
+.range-average-container {
+    position: absolute;
+    width: 66%;
+    height: 100%;
+    left: 13%;
 }

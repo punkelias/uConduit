@@ -4,4 +4,5 @@ export class Answer {
     text: string;
     feedback: number;
     classname: string;
+    feedbackValue: number;
 }

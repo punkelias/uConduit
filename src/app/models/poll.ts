@@ -8,7 +8,7 @@ export class Poll {
     name: string;
     points: number;
     questions: Question[];
-    show_crow_answers: number;
+    instant_feedback: number;
     created_at: string;
     cover: string;
     color: string;

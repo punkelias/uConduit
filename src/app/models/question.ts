@@ -6,4 +6,7 @@ export class Question {
     text: string;
     type: string;
     answers: Answer[];
+    feedback: any;
+    answered: boolean;
+    feedbackValue: number;
 }

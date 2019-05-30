@@ -46,6 +46,7 @@ export class DetailsPage implements OnInit {
       for (const answer of question.answers) {
         answer.classname = '';
       }
+      question.answered = false;
     }
   }
 
@@ -61,7 +62,8 @@ export class DetailsPage implements OnInit {
     this.navCtrl.pop();
   }
 
-  saveAnswer (question: Question, value: string, index: number) {
+  saveAnswer (question: Question, value: string, index: number, type: string) {
+    question.answered = true;
     for (const answer of question.answers) {
       if (answer.id.toString() === value) {
         answer.classname = 'chosen';
@@ -72,21 +74,21 @@ export class DetailsPage implements OnInit {
 
     this.openQuestions[index].value = parseInt(value, 10);
 
+    if (this.poll.instant_feedback) {
+      if (type === 'multiple') {
+        this.createChartMultiple(question, this.openQuestions[index].value);
+      } else {
+        this.createChartScale(question, this.openQuestions[index].value, 5);
+      }
+    } else {
+      this.advance(index);
+    }
+
     const playerAnswer = new PlayerAnswer();
     playerAnswer.poll_id = this.poll.id;
     playerAnswer.question_id = question.id;
     playerAnswer.value = value;
     this.answers.push(playerAnswer);
-
-    if (this.poll.show_crow_answers) {
-      this.createChart(question);
-    }
-
-    if (index < this.poll.questions.length - 1) {
-      this.slides.slideNext(3000);
-    } else {
-      this.sendAnswers();
-    }
   }
 
   saveYesNoAnswer (question: Question, value: string, index: number) {
@@ -103,19 +105,14 @@ export class DetailsPage implements OnInit {
     playerAnswer.question_id = question.id;
     playerAnswer.value = value;
     this.answers.push(playerAnswer);
+    question.answered = true;
 
-    if (this.poll.show_crow_answers) {
-      this.createChart(question);
-    }
-
-    if (index < this.poll.questions.length - 1) {
-      this.slides.slideNext(3000);
-    } else {
-      this.sendAnswers();
+    if (this.poll.instant_feedback) {
+      this.createChart(question, value);
     }
   }
 
-  saveOpenAnswer (question: Question, index: number) {
+  saveOpenAnswer (question: Question, index: number, type: string) {
     let value = '';
     for (const openQuestion of this.openQuestions) {
       if (openQuestion.id == question.id) {
@@ -129,10 +126,10 @@ export class DetailsPage implements OnInit {
     playerAnswer.value = value;
     this.answers.push(playerAnswer);
 
-    if (index < this.poll.questions.length - 1) {
-      this.slides.slideNext(1500);
+    if (type === 'range' && !question.answered && this.poll.instant_feedback) {
+      this.createChartRange(question);
     } else {
-      this.sendAnswers();
+      this.advance(index);
     }
   }
 
@@ -250,7 +247,7 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  updateAnswer (value: number) {
+  updateAnswer (question: Question, value: number) {
     if (this.checkBoxAnswers.includes(value)) {
       this.checkBoxAnswers.splice(this.checkBoxAnswers.indexOf(value), 1);
     } else {
@@ -258,19 +255,18 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  saveCheckBoxAnswers (question: Question, index: number) {
+  saveCheckBoxAnswers (question: Question, index: number, type: string) {
     const playerAnswer = new PlayerAnswer();
     playerAnswer.poll_id = this.poll.id;
     playerAnswer.question_id = question.id;
     playerAnswer.value = this.checkBoxAnswers.join(',');
     this.answers.push(playerAnswer);
-    this.checkBoxAnswers = [];
-    this.checkBoxAnswers.length = 0;
+    question.answered = true;
 
-    if (index < this.poll.questions.length - 1) {
-      this.slides.slideNext(1500);
+    if (type === 'checkbox' && this.poll.instant_feedback) {
+      this.createChartCheckBox(question);
     } else {
-      this.sendAnswers();
+      this.advance(index);
     }
   }
 
@@ -286,16 +282,17 @@ export class DetailsPage implements OnInit {
   }
 
   segmentChanged(ev: any, question: Question, index: number) {
+    question.answered = true;
     const playerAnswer = new PlayerAnswer();
     playerAnswer.poll_id = this.poll.id;
     playerAnswer.question_id = question.id;
     playerAnswer.value = ev.detail.value;
     this.answers.push(playerAnswer);
 
-    if (index < this.poll.questions.length - 1) {
-      this.slides.slideNext(1500);
+    if (this.poll.instant_feedback) {
+      this.createChartScale(question, ev.detail.value, 10);
     } else {
-      this.sendAnswers();
+      question.answered = true;
     }
   }
 
@@ -315,32 +312,52 @@ export class DetailsPage implements OnInit {
             console.log(this.matrixAnswers.length);
           }
         }
+
+        this.feedbackData = null;
       }
    });
   }
 
-  createChart(question: Question) {
+  createChart(question: Question, value: string) {
     this.feedbackData = {
       chartType: 'PieChart',
       dataTable: [
         ['Answer', 'Percent']
       ],
       options: {
-      'width': 400,
-      'height': 300
+      'width': 300,
+      'height': 200,
+      backgroundColor: 'transparent',
+      fill: 'transparent',
+      legend: 'labeled',
+      theme: 'maximized'
       }
     };
 
     let totalAnswered = 0;
-    for (const answer of question.answers) {
-      totalAnswered += answer.feedback;
+
+    if (!question.feedback) {
+      question.feedback = { No: 0, Yes: 0 };
     }
 
-    if (totalAnswered > 0) {
-      for (const answer of question.answers) {
-        this.feedbackData.dataTable.push([answer.text, answer.feedback / totalAnswered]);
-      }
+    if (!question.feedback['No']) {
+      question.feedback.No = 0;
     }
+
+    if (!question.feedback['Yes']) {
+      question.feedback.Yes = 0;
+    }
+
+    if (value === 'Yes') {
+      question.feedback.Yes += 1;
+    } else {
+      question.feedback.No += 1;
+    }
+
+    totalAnswered = question.feedback.Yes + question.feedback.No;
+console.log(question.feedback.Yes + ' ' + question.feedback.No + ' ' + totalAnswered);
+    this.feedbackData.dataTable.push(['Yes', question.feedback.Yes / totalAnswered]);
+    this.feedbackData.dataTable.push(['No', question.feedback.No / totalAnswered]);
   }
 
   updateMatrixAnswers (index: number, value: number) {
@@ -355,10 +372,151 @@ export class DetailsPage implements OnInit {
     this.answers.push(playerAnswer);
     this.matrixAnswers = [];
     this.matrixAnswers.length = 0;
+
+    this.advance(index);
+  }
+
+  createChartMultiple (question: Question, value: number) {
+    let totalAnswered = 0;
+
+    for (const answer of question.answers) {
+      if (value == answer.id) {
+        answer.feedback += 1;
+      }
+      totalAnswered += answer.feedback;
+    }
+
+    for (const answer of question.answers) {
+      answer.feedbackValue = (answer.feedback / totalAnswered) * 100;
+    }
+  }
+
+  createChartCheckBox(question: Question) {
+    let totalAnswered = 0;
+    question.answered = true;
+
+    for (const answer of question.answers) {
+      for (const value of this.checkBoxAnswers) {
+        if (value == answer.id) {
+          answer.feedback += 1;
+        }
+      }
+      totalAnswered += answer.feedback;
+    }
+
+    for (const answer of question.answers) {
+      answer.feedbackValue = (answer.feedback / totalAnswered) * 100;
+    }
+    this.checkBoxAnswers = [];
+    this.checkBoxAnswers.length = 0;
+  }
+
+  createChartScale(question: Question, value: number, limit: number) {
+    let totalAnswered = 0;
+    let sumAnswers = 0;
+    question.answered = true;
+
+    if (!question.feedback) {
+      if (limit == 5) {
+        question.feedback = {
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0
+        };
+      } else {
+        question.feedback = {
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0,
+          6: 0,
+          7: 0,
+          8: 0,
+          9: 0,
+          10: 0
+        };
+      }
+    }
+
+    if (!question.feedback[1]) {
+      question.feedback[1] = 0;
+    }
+
+    if (!question.feedback[2]) {
+      question.feedback[2] = 0;
+    }
+
+    if (!question.feedback[3]) {
+      question.feedback[3] = 0;
+    }
+
+    if (!question.feedback[4]) {
+      question.feedback[4] = 0;
+    }
+
+    if (!question.feedback[5]) {
+      question.feedback[5] = 0;
+    }
+
+    if (limit == 10) {
+      if (!question.feedback[6]) {
+        question.feedback[6] = 0;
+      }
+
+      if (!question.feedback[7]) {
+        question.feedback[7] = 0;
+      }
+
+      if (!question.feedback[8]) {
+        question.feedback[8] = 0;
+      }
+
+      if (!question.feedback[9]) {
+        question.feedback[9] = 0;
+      }
+
+      if (!question.feedback[10]) {
+        question.feedback[10] = 0;
+      }
+    }
+
+    question.feedback[value] += 1;
+
+    totalAnswered = question.feedback[1] + question.feedback[2] + question.feedback[3] + question.feedback[4] + question.feedback[5];
+    sumAnswers = question.feedback[1] + (2 * question.feedback[2]) + (3 * question.feedback[3]) +
+    (4 * question.feedback[4]) + (5 * question.feedback[5]);
+
+    if (limit == 10) {
+      totalAnswered += question.feedback[6] + question.feedback[7] + question.feedback[8] + question.feedback[9] + question.feedback[10];
+      sumAnswers += (6 * question.feedback[6]) + (7 * question.feedback[7]) + (8 * question.feedback[8]) +
+      (9 * question.feedback[9]) + (10 * question.feedback[10]);
+    }
+
+    question.feedbackValue = Math.round(sumAnswers / totalAnswered);
+    console.log(question.feedbackValue);
+  }
+
+  advance(index: number) {
     if (index < this.poll.questions.length - 1) {
       this.slides.slideNext(1500);
     } else {
       this.sendAnswers();
     }
+  }
+
+  createChartRange(question: Question) {
+    question.answered = true;
+    let totalAnswered = 0;
+    let sumAnswers = 0;
+
+    for (const keys of Object.keys(question.feedback)) {
+      totalAnswered += question.feedback[keys];
+      sumAnswers += question.feedback[keys] * parseInt(keys, 10);
+    }
+
+    question.feedbackValue = Math.round(sumAnswers / totalAnswered);
   }
 }

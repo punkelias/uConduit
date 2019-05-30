@@ -29,7 +29,7 @@
           </ion-row>
 
           <ion-row *ngIf="question.type === 'yesno'" class="answers-row">
-            <ion-card>
+            <ion-card *ngIf=!feedbackData>
               <ion-col *ngFor="let answer of question.answers" class="answer-col">
                 <ion-button no-padding class="no-margin no-padding" (click)="saveYesNoAnswer(question, answer.text, i)" [attr.clear]="true" fill="clear" [ngClass]="answer.classname">
                   <!--<ion-label [attr.clear]="true" fill="clear">{{answer.text}}</ion-label>-->
@@ -41,21 +41,34 @@
               </ion-col>
             </ion-card>
 
-            <ion-content padding>
+            <ion-card class="yesno-chart">
               <google-chart [data]="feedbackData"></google-chart>
-            </ion-content>
+            </ion-card>
+
+            <ion-button class='open-question-button' (click)="advance(i)" *ngIf=question.answered>
+              <ion-label *ngIf="i < poll.questions.length - 1; else lastQuestion">Next</ion-label>
+              <ng-template #lastQuestion>
+                <ion-label>Finish</ion-label>
+              </ng-template>
+            </ion-button>
           </ion-row>
 
           <ion-row *ngIf="question.type === 'multiple'" class="answers-row-multiple" [ngStyle]="{'height': (70*question.answers.length).toString() + 'px'}">
             <ion-card *ngFor="let answer of question.answers" class="multiple-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}" style="margin-bottom: 4%;">
-              <ion-button [attr.clear]="true" fill="clear" expand="full" (click)="saveAnswer(question, answer.id.toString(), i)" [ngClass]="answer.classname">
+              <ion-button [attr.clear]="true" fill="clear" expand="full" (click)="saveAnswer(question, answer.id.toString(), i, question.type)" [ngClass]="answer.classname">
+                <div class="multiple-chart" [ngStyle]="{width: answer.feedbackValue.toString() + '%'}" *ngIf=question.answered>
+                  <ion-label>{{answer.feedbackValue}} %</ion-label>
+                </div>
                 <ion-label [attr.clear]="true" fill="clear">{{answer.text}}</ion-label>
               </ion-button>
             </ion-card>
 
-            <ion-content padding>
-              <google-chart [data]="feedbackData"></google-chart>
-            </ion-content>
+            <ion-button class='open-question-button multiple-question-button' (click)="advance(i)" *ngIf=question.answered>
+              <ion-label *ngIf="i < poll.questions.length - 1; else lastQuesiton">Next</ion-label>
+              <ng-template #lastQuesiton>
+                <ion-label>Finish</ion-label>
+              </ng-template>
+            </ion-button>
           </ion-row>
 
           <ion-row *ngIf="question.type === 'dropdown'">
@@ -64,7 +77,7 @@
                 <ion-select-option *ngFor="let answer of question.answers" class='dropdown-answer' value="{{answer.id}}">{{answer.text}}</ion-select-option>
               </ion-select>
             </ion-col>
-            <ion-button class='open-question-button' (click)="saveOpenAnswer(question, i)">
+            <ion-button class='open-question-button' (click)="saveOpenAnswer(question, i, question.type)">
               <ion-label *ngIf="i < poll.questions.length - 1; else lastQuesiton">Next</ion-label>
               <ng-template #lastQuesiton>
                 <ion-label>Finish</ion-label>
@@ -76,18 +89,31 @@
             <ion-segment (ionChange)="segmentChanged($event, question, i)">
               <ion-segment-button *ngFor="let element of [1,2,3,4,5,6,7,8,9,10]" value="{{element}}" [style.width.%]="10" [style.min-width.%]="10">
                 <ion-label>{{element}}</ion-label>
+                <ion-icon class="rating-average" name="arrow-down" *ngIf="question.answered && question.feedbackValue == element"></ion-icon>
               </ion-segment-button>
             </ion-segment>
+
+            <ion-button class='open-question-button' (click)="advance(i)" *ngIf=question.answered>
+              <ion-label *ngIf="i < poll.questions.length - 1; else lastQuestion">Next</ion-label>
+              <ng-template #lastQuestion>
+                <ion-label>Finish</ion-label>
+              </ng-template>
+            </ion-button>
           </ion-row>
 
           <ion-row *ngIf="question.type === 'checkbox'" class="answers-row-checkbox" [ngStyle]="{'height': (60*question.answers.length).toString() + 'px'}">
             <ion-list>
               <ion-item *ngFor="let answer of question.answers" class="checkbox-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}">
+                <div class="checkbox-chart" [ngStyle]="{width: answer.feedbackValue.toString() + '%'}" *ngIf=question.answered></div>
                 <ion-label>{{answer.text}}</ion-label>
-                <ion-checkbox slot="start" (ionChange)="updateAnswer(answer.id)" class="checkbox-item"></ion-checkbox>
+                <ion-checkbox slot="start" (ionChange)="updateAnswer(question, answer.id)" class="checkbox-item"></ion-checkbox>
               </ion-item>
             </ion-list>
-            <ion-button class='open-question-button' (click)="saveCheckBoxAnswers(question, i)">
+            <ion-button class='open-question-button' (click)="saveCheckBoxAnswers(question, i, question.type)" *ngIf=!question.answered>
+              <ion-label>Save</ion-label>
+            </ion-button>
+
+            <ion-button class='open-question-button' (click)="advance(i)" *ngIf=question.answered>
               <ion-label *ngIf="i < poll.questions.length - 1; else lastQuestion">Next</ion-label>
               <ng-template #lastQuestion>
                 <ion-label>Finish</ion-label>
@@ -104,7 +130,7 @@
                 </ion-item>
               </ion-reorder-group>
             </ion-list>
-            <ion-button class='open-question-button' (click)="saveCheckBoxAnswers(question, i)">
+            <ion-button class='open-question-button' (click)="saveCheckBoxAnswers(question, i, question.type)">
               <ion-label *ngIf="i < poll.questions.length - 1; else lastQuestion">Next</ion-label>
               <ng-template #lastQuestion>
                 <ion-label>Finish</ion-label>
@@ -123,8 +149,11 @@
                 <ion-label slot="start">0</ion-label>
                 <ion-label slot="end">100</ion-label>
               </ion-range>
+              <div class="range-average-container">
+                <ion-icon class="range-average" name="arrow-down" [ngStyle]="{'color': poll.color, 'left': question.feedbackValue.toString() + '%' }" *ngIf="question.answered && question.feedbackValue"></ion-icon>
+              </div>
             </ion-item>            
-            <ion-button class='open-question-button' (click)="saveOpenAnswer(question, i)">
+            <ion-button class='open-question-button' (click)="saveOpenAnswer(question, i, question.type)">
               <ion-label *ngIf="i < poll.questions.length - 1; else lastQuesiton">Next</ion-label>
               <ng-template #lastQuesiton>
                 <ion-label>Finish</ion-label>
@@ -136,7 +165,7 @@
             <ion-item class='open-question'>
               <ion-textarea class='open-question-textarea' [(ngModel)]="openQuestions[i].value"></ion-textarea>
             </ion-item>
-            <ion-button class='open-question-button' (click)="saveOpenAnswer(question, i)">
+            <ion-button class='open-question-button' (click)="saveOpenAnswer(question, i, question.type)">
               <ion-label *ngIf="i < poll.questions.length - 1; else lastQuesiton">Next</ion-label>
               <ng-template #lastQuesiton>
                 <ion-label>Finish</ion-label>
@@ -147,16 +176,25 @@
           <ion-row class='scale-question-row' *ngIf="question.type === 'scale'">
             <ion-item class='scale-question'>
               <ion-item class='scale-icon-container' *ngFor="let number of  [0, 1, 2, 3, 4]">
-                <ion-button no-padding fill="clear" class="scale-icon full no-margin no-padding" (click)="saveAnswer(question, (number + 1).toString(), i)" *ngIf="openQuestions[i].value && number<openQuestions[i].value; else unselected">
-                    <ion-icon class="scale-star" name="star"></ion-icon>
+                <ion-button no-padding fill="clear" class="scale-icon full no-margin no-padding" (click)="saveAnswer(question, (number + 1).toString(), i, question.type)" *ngIf="openQuestions[i].value && number<openQuestions[i].value; else unselected">
+                  <ion-icon class="scale-star" name="star" [ngStyle]="{'color': poll.color}"></ion-icon>
+                  <ion-icon class="answers-average" name="arrow-down" [ngStyle]="{'color': poll.color}" *ngIf="question.answered && question.feedbackValue == (number + 1)"></ion-icon>
                 </ion-button>
                 <ng-template #unselected>
-                  <ion-button no-padding fill="clear" class="scale-icon full no-margin no-padding" (click)="saveAnswer(question, (number + 1).toString(), i)">
-                    <ion-icon class="scale-star" name="star-outline"></ion-icon>
+                  <ion-button no-padding fill="clear" class="scale-icon full no-margin no-padding" (click)="saveAnswer(question, (number + 1).toString(), i, question.type)">
+                    <ion-icon class="scale-star" name="star-outline" [ngStyle]="{'color': poll.color}"></ion-icon>
+                    <ion-icon class="answers-average" name="arrow-down" [ngStyle]="{'color': poll.color}" *ngIf="question.answered && question.feedbackValue == (number + 1)"></ion-icon>
                   </ion-button>
                 </ng-template>
               </ion-item>
             </ion-item>
+
+            <ion-button class='open-question-button' (click)="advance(i)" *ngIf=question.answered>
+              <ion-label *ngIf="i < poll.questions.length - 1; else lastQuestion">Next</ion-label>
+              <ng-template #lastQuestion>
+                <ion-label>Finish</ion-label>
+              </ng-template>
+            </ion-button>
           </ion-row>
 
           <ion-row class='scale-question-row' *ngIf="question.type === 'matrix'">
