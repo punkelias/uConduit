@@ -88,9 +88,10 @@
           <ion-row *ngIf="question.type === 'rating'">
             <ion-segment (ionChange)="segmentChanged($event, question, i)">
               <ion-segment-button *ngFor="let element of [1,2,3,4,5,6,7,8,9,10]" value="{{element}}" [style.width.%]="10" [style.min-width.%]="10">
-                <ion-label>{{element}}</ion-label>
+                <ion-label class="rating-label">{{element}}</ion-label>
                 <ion-icon class="rating-average" name="arrow-down" *ngIf="question.answered && question.feedbackValue == element"></ion-icon>
               </ion-segment-button>
+              <ion-label class="rating-average-text" *ngIf="question.answered" [ngStyle]="{'left': (question.feedbackData*10).toString() + '%'}">Average</ion-label>
             </ion-segment>
 
             <ion-button class='open-question-button' (click)="advance(i)" *ngIf=question.answered>
@@ -178,14 +179,14 @@
               <ion-item class='scale-icon-container' *ngFor="let number of  [0, 1, 2, 3, 4]">
                 <ion-button no-padding fill="clear" class="scale-icon full no-margin no-padding" (click)="saveAnswer(question, (number + 1).toString(), i, question.type)" *ngIf="openQuestions[i].value && number<openQuestions[i].value; else unselected">
                   <ion-icon class="scale-star" name="star" [ngStyle]="{'color': poll.color}"></ion-icon>
-                  <ion-icon class="answers-average" name="arrow-down" [ngStyle]="{'color': poll.color}" *ngIf="question.answered && question.feedbackValue == (number + 1)"></ion-icon>
                 </ion-button>
                 <ng-template #unselected>
                   <ion-button no-padding fill="clear" class="scale-icon full no-margin no-padding" (click)="saveAnswer(question, (number + 1).toString(), i, question.type)">
                     <ion-icon class="scale-star" name="star-outline" [ngStyle]="{'color': poll.color}"></ion-icon>
-                    <ion-icon class="answers-average" name="arrow-down" [ngStyle]="{'color': poll.color}" *ngIf="question.answered && question.feedbackValue == (number + 1)"></ion-icon>
                   </ion-button>
                 </ng-template>
+                <ion-icon class="answers-average answers-average-icon" name="arrow-down" [ngStyle]="{'color': poll.color}" *ngIf="question.answered && question.feedbackValue == (number + 1)"></ion-icon>
+                <ion-label class="answers-average answers-average-text" [ngStyle]="{'color': poll.color}" *ngIf="question.answered && question.feedbackValue == (number + 1)">Average</ion-label>
               </ion-item>
             </ion-item>
 

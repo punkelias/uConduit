@@ -432,3 +432,23 @@ rect {
     height: 100%;
     left: 13%;
 }
+
+.answers-average-text {
+    top: 22px !important;
+    text-align: left;
+    left: 11px;
+    font-size: 10px !important;
+}
+
+.rating-label {
+    margin-bottom: 12px !important;
+}
+
+.rating-average-text {
+    position: absolute;
+    text-align: center;
+    margin-left: 15px;
+    font-size: 10px;
+    color: white;
+    top: 32px;
+}

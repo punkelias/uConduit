@@ -330,7 +330,8 @@ export class DetailsPage implements OnInit {
       backgroundColor: 'transparent',
       fill: 'transparent',
       legend: 'labeled',
-      theme: 'maximized'
+      theme: 'maximized',
+      colors: [this.poll.color, this.poll.background_color]
       }
     };
 
