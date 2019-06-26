@@ -20,4 +20,5 @@ export class User {
     completerLevel: number;
     state_id: number;
     city_id: number;
+    city: string;
 }

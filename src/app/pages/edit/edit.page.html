@@ -59,9 +59,9 @@
               </ion-button>            
             </ion-item>
   
-            <ion-item *ngIf="fileBase64" id='profile-pic'>
+            <ion-avatar *ngIf="fileBase64" id='profile-pic'>
               <img src="{{fileBase64}}" >
-            </ion-item>
+            </ion-avatar>
             <ion-item>
               <ion-label position="floating">First Name</ion-label>
               <ion-input type="text" formControlName="name" value="{{user.first_name}}"></ion-input>
@@ -131,11 +131,17 @@
                 </ion-select>
               </ion-item>
     
-              <ion-item *ngIf="cities && cities.length > 0">
+              <ion-item *ngIf="cities">
                 <ion-label position="floating">City</ion-label>
-                <ion-select formControlName="cityid" class='dropdown-cities' placeholder="Select your City" value="{{user.city_id}}">
+                <ion-input type="text" formControlName="cityid" value="{{user.city}}" [(ngModel)]='citySearch'></ion-input>
+                <!--<ion-select formControlName="cityid" class='dropdown-cities' placeholder="Select your City" value="{{user.city_id}}">
                   <ion-select-option *ngFor="let city of cities" class='dropdown-city' value="{{city.id}}">{{city.name}}</ion-select-option>
-                </ion-select>
+                </ion-select>-->
+                <!--<ng-template #customTemplate let-attrs="attrs">
+                  <span [innerHTML]="attrs.data.name | boldprefix:attrs.keyword" class="result-name"></span>
+               </ng-template>
+ 
+               <ion-auto-complete formControlName="cityid" [template]="customTemplate" [dataProvider]="authService" ngDefaultControl class="overflow city-autocomplete" #searchbar></ion-auto-complete>-->
               </ion-item>
   
               <ion-item>

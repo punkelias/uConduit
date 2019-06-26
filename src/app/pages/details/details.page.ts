@@ -331,7 +331,9 @@ export class DetailsPage implements OnInit {
       fill: 'transparent',
       legend: 'labeled',
       theme: 'maximized',
-      colors: [this.poll.color, this.poll.background_color]
+      colors: [this.poll.color, this.poll.background_color],
+      fontSize: 16,
+      fontName: 'Lato-Regular'
       }
     };
 
@@ -356,7 +358,6 @@ export class DetailsPage implements OnInit {
     }
 
     totalAnswered = question.feedback.Yes + question.feedback.No;
-console.log(question.feedback.Yes + ' ' + question.feedback.No + ' ' + totalAnswered);
     this.feedbackData.dataTable.push(['Yes', question.feedback.Yes / totalAnswered]);
     this.feedbackData.dataTable.push(['No', question.feedback.No / totalAnswered]);
   }

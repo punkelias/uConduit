@@ -56,9 +56,8 @@
           <ion-row *ngIf="question.type === 'multiple'" class="answers-row-multiple" [ngStyle]="{'height': (70*question.answers.length).toString() + 'px'}">
             <ion-card *ngFor="let answer of question.answers" class="multiple-answer-col" [ngStyle]="{'height': (100/(question.answers.length+1)).toString()+'%'}" style="margin-bottom: 4%;">
               <ion-button [attr.clear]="true" fill="clear" expand="full" (click)="saveAnswer(question, answer.id.toString(), i, question.type)" [ngClass]="answer.classname">
-                <div class="multiple-chart" [ngStyle]="{width: answer.feedbackValue.toString() + '%'}" *ngIf=question.answered>
-                  <ion-label>{{answer.feedbackValue}} %</ion-label>
-                </div>
+                <div class="multiple-chart" [ngStyle]="{width: answer.feedbackValue.toString() + '%'}" *ngIf=question.answered></div>
+                <ion-label class="multiple-chart-value" *ngIf=question.answered>{{answer.feedbackValue}} %</ion-label>
                 <ion-label [attr.clear]="true" fill="clear">{{answer.text}}</ion-label>
               </ion-button>
             </ion-card>
@@ -91,7 +90,7 @@
                 <ion-label class="rating-label">{{element}}</ion-label>
                 <ion-icon class="rating-average" name="arrow-down" *ngIf="question.answered && question.feedbackValue == element"></ion-icon>
               </ion-segment-button>
-              <ion-label class="rating-average-text" *ngIf="question.answered" [ngStyle]="{'left': (question.feedbackData*10).toString() + '%'}">Average</ion-label>
+              <ion-label class="rating-average-text" *ngIf="question.answered" [ngStyle]="{'left': (question.feedbackValue - 1).toString() + '0%'}">Average</ion-label>
             </ion-segment>
 
             <ion-button class='open-question-button' (click)="advance(i)" *ngIf=question.answered>

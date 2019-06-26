@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="mx.ncite.uconduitapp" version="1.190603" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="mx.ncite.uconduitapp" version="1.190626" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>uConduit</name>
     <description>Polling app.</description>
     <author email="elias@ncite.mx" href="http://ionicframework.com/">Ncite MX</author>

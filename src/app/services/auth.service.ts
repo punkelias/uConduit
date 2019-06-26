@@ -11,7 +11,8 @@ import { Place } from '../models/place';
 import { Answer } from '../models/answer';
 import { Mission } from '../models/mission';
 import { PlayerMission } from '../models/playerMission';
-import { elementEnd } from '@angular/core/src/render3';
+import {Observable, of} from 'rxjs';
+import { AutoCompleteService } from 'ionic4-auto-complete';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,7 @@ export class AuthService {
   private states: Place[];
   private cities: Place[];
   private missions: Mission[];
+  private currentState: number;
 
   constructor(
     private http: HttpClient,
@@ -116,6 +118,8 @@ export class AuthService {
             },
             error => console.error('Error storing date', error)
           );
+
+          this.retrieveCities(this.player.state_id);
 
           return this.token;
         }
@@ -325,7 +329,25 @@ export class AuthService {
   }
 
   retrieveCities(stateCode: number) {
+    this.currentState = stateCode;
+
     return this.http.get<any>(this.env.API_URL + 'state/' + stateCode +  '/cities')
+    .subscribe((response) => {
+        this.cities = response.cities;
+        this.events.publish('cities:created', (this.cities));
+
+        for (const city of this.cities) {
+          if (city.id == this.player.city_id) {
+            this.player.city = city.name;
+          }
+        }
+    });
+  }
+
+  retrieveCitiesAutocomplete(keyword: string) {
+    const url = this.env.API_URL + 'state/' + this.currentState +  '/cities?name=' + keyword;
+
+    return this.http.get<any>(url)
     .subscribe((response) => {
         this.cities = response.cities;
         this.events.publish('cities:created', (this.cities));

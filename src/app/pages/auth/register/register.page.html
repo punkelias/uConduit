@@ -5,6 +5,11 @@
     <ion-col col-4></ion-col>
   </ion-row>
   <div id="separator"></div>
+  <ion-col col-1 class="back-button">
+    <ion-button [attr.clear]="true" fill="clear" (click)="GoBack()">
+    <ion-icon name="arrow-round-back" style="color: white;"></ion-icon>
+    </ion-button>
+  </ion-col>
   <h1>Create your account.</h1>
 
   <ion-slides #signUpSlider>
@@ -54,9 +59,9 @@
             </ion-button>            
           </ion-item>
 
-          <ion-item *ngIf="fileBase64" id='profile-pic'>
+          <ion-avatar *ngIf="fileBase64" id='profile-pic'>
             <img src="{{fileBase64}}" >
-          </ion-item>
+          </ion-avatar>
           <ion-item>
             <ion-label position="floating">First Name</ion-label>
             <ion-input type="text" formControlName="name"></ion-input>
@@ -128,9 +133,14 @@
   
             <ion-item *ngIf="cities && cities.length > 0">
               <ion-label position="floating">City</ion-label>
-              <ion-select formControlName="cityid" class='dropdown-cities' placeholder="Select your City">
+              <!--<ion-select formControlName="cityid" class='dropdown-cities' placeholder="Select your City">
                 <ion-select-option *ngFor="let city of cities" class='dropdown-city' value="{{city.id}}">{{city.name}}</ion-select-option>
-              </ion-select>
+              </ion-select>-->
+              <ng-template #customTemplate let-attrs="attrs">
+                 <span [innerHTML]="attrs.data.name | boldprefix:attrs.keyword" class="result-name"></span>
+              </ng-template>
+
+              <ion-auto-complete formControlName="cityid" [template]="customTemplate" [dataProvider]="authService" ngDefaultControl class="overflow city-autocomplete"></ion-auto-complete>
             </ion-item>
 
             <ion-item>

@@ -1,19 +1,16 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { ModalController, NavController, Events, LoadingController } from '@ionic/angular';
+import { NavController, Events, LoadingController, IonContent } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
 
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/Camera/ngx';
 import { ActionSheetController, ToastController, Platform } from '@ionic/angular';
-import { File as IonicFile, FileEntry, IFile } from '@ionic-native/File/ngx';
+import { File as IonicFile } from '@ionic-native/File/ngx';
 import { HttpClient } from '@angular/common/http';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { Storage } from '@ionic/storage';
-import { FilePath } from '@ionic-native/file-path/ngx';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 import { Place } from 'src/app/models/place';
 
 const STORAGE_KEY = 'my_images';
@@ -21,11 +18,14 @@ const STORAGE_KEY = 'my_images';
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
-  styleUrls: ['./register.page.scss'],
+  styleUrls: [
+    './register.page.scss'
+    ],
 })
 export class RegisterPage implements OnInit {
   image = [];
   @ViewChild('signUpSlider') signupSlider;
+  @ViewChild(IonContent) content: IonContent;
   step_one_form: FormGroup;
   step_two_form: FormGroup;
   step_three_form: FormGroup;
@@ -74,16 +74,9 @@ export class RegisterPage implements OnInit {
 
   constructor(
     private camera: Camera, private file: IonicFile, private http: HttpClient, private webview: WebView,
-    private actionSheetController: ActionSheetController, private toastController: ToastController,
-    private storage: Storage, private plt: Platform, private ref: ChangeDetectorRef, private filePath: FilePath,
-    public formBuilder: FormBuilder,
-    private router: Router,
-    private modalController: ModalController,
-    private authService: AuthService,
-    private navCtrl: NavController,
-    private alertService: AlertService,
-    public events: Events,
-    public loadingController: LoadingController
+    private actionSheetController: ActionSheetController, private storage: Storage, private plt: Platform,
+    public formBuilder: FormBuilder, public authService: AuthService, private navCtrl: NavController,
+    private alertService: AlertService, public events: Events, public loadingController: LoadingController
   ) {
     this.events.subscribe('states:created',
       (states) => {
@@ -239,7 +232,6 @@ export class RegisterPage implements OnInit {
 
     this.camera.getPicture(options).then((imageData) => {
       this.fileBase64 = 'data:image/jpeg;base64,' + imageData;
-      //this.fileToUpload = this.getSingleFile(imageData);
       // Naming the image
       const date = new Date().valueOf();
       let text = '';
@@ -252,28 +244,11 @@ export class RegisterPage implements OnInit {
       // call method that creates a blob from dataUri
       const imageBlob = this.dataURItoBlob(imageData);
       this.fileToUpload = imageBlob;
-      //this.fileToUpload = new File([imageBlob], imageName, { type: 'image/jpeg' });
+      document.getElementById('profile-pic').click();
      }, (err) => {
       // Handle error
       console.log(err);
      });
-
-    /*this.camera.getPicture(options).then(imagePath => {
-        if (this.plt.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
-            this.filePath.resolveNativePath(imagePath)
-                .then(filePath => {
-                    const correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
-                    const currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-                    this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
-                });
-        } else {
-            const currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
-            const correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-            console.log(currentName);
-            console.log(correctPath);
-            this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
-        }
-    });*/
   }
 
   dataURItoBlob(dataURI) {
@@ -289,77 +264,6 @@ export class RegisterPage implements OnInit {
 
     return blob;
  }
-
-  /*createFileName() {
-    const d = new Date(),
-        n = d.getTime(),
-        newFileName = n + '.jpg';
-    return newFileName;
-  }
-
-  copyFileToLocalDir(namePath, currentName, newFileName) {
-      this.file.copyFile(namePath, currentName, this.file.dataDirectory, newFileName).then(success => {
-          this.updateStoredImages(newFileName);
-      }, error => {
-          console.error('Error while storing file.');
-          console.error(error);
-      });
-  }
-
-  updateStoredImages(name) {
-      const filePath = this.file.dataDirectory + name;
-      const resPath = this.pathForImage(filePath);
-
-      const newEntry = {
-          name: name,
-          path: resPath,
-          filePath: filePath
-      };
-      if (this.image[0]) {
-        this.deleteImage(this.image[0], 0);
-      }
-      this.image = [newEntry, ...this.image];
-      this.ref.detectChanges(); // trigger change detection cycle
-      this.startUpload(this.image);
-  }
-
-  deleteImage(imgEntry, position) {
-    this.image.splice(position, 1);
-
-    this.storage.get(STORAGE_KEY).then(images => {
-        const arr = JSON.parse(images);
-        const filtered = arr.filter(name => name != imgEntry.name);
-        this.storage.set(STORAGE_KEY, JSON.stringify(filtered));
-
-        const correctPath = imgEntry.filePath.substr(0, imgEntry.filePath.lastIndexOf('/') + 1);
-
-        this.file.removeFile(correctPath, imgEntry.name).then(res => {
-            console.log('File removed.');
-        });
-    });
-  }
-
-  startUpload(imgEntry) {
-    this.file.resolveLocalFilesystemUrl(imgEntry.filePath)
-        .then(entry => {
-            ( < FileEntry > entry).file(file => this.readFile(file));
-        })
-        .catch(err => {
-            console.error('Error while reading file.');
-        });
-  }
-
-  readFile(file: any) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-          const imgBlob = new Blob([reader.result], {
-              type: file.type
-          });
-          this.fileToUpload.imgBlob = imgBlob;
-          this.fileToUpload.fileName = file.name;
-      };
-      reader.readAsArrayBuffer(file);
-  }*/
 
   onSubmit() {
     this.submitAttempt = true;
@@ -380,10 +284,12 @@ export class RegisterPage implements OnInit {
 
   next() {
     this.signupSlider.slideNext();
+    this.content.scrollToTop(50);
   }
 
   prev() {
-      this.signupSlider.slidePrev();
+    this.signupSlider.slidePrev();
+    this.content.scrollToTop(50);
   }
 
   register() {
@@ -439,40 +345,6 @@ export class RegisterPage implements OnInit {
     }
   }
 
-  async getSingleFile(filePath: string): Promise<File> {
-    // Get FileEntry from image path
-    const fileEntry: FileEntry = await this.file.resolveLocalFilesystemUrl(filePath) as FileEntry;
-
-    // Get File from FileEntry. Again note that this file does not contain the actual file data yet.
-    const cordovaFile: IFile = await this.convertFileEntryToCordovaFile(fileEntry);
-
-    // Use FileReader on each object to populate it with the true file contents.
-    return this.convertCordovaFileToJavascriptFile(cordovaFile);
-  }
-
-  private convertFileEntryToCordovaFile(fileEntry: FileEntry): Promise<IFile> {
-    return new Promise<IFile>((resolve, reject) => {
-      fileEntry.file(resolve, reject);
-    });
-  }
-
-  private convertCordovaFileToJavascriptFile(cordovaFile: IFile): Promise<File> {
-    return new Promise<File>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.error) {
-          reject(reader.error);
-        } else {
-          const blob: any = new Blob([reader.result], { type: cordovaFile.type });
-          blob.lastModifiedDate = new Date();
-          blob.name = cordovaFile.name;
-          resolve(blob as File);
-        }
-      };
-      reader.readAsArrayBuffer(cordovaFile);
-    });
-  }
-
   async presentLoading() {
     this.loading = await this.loadingController.create({
       message: 'Please wait...',
@@ -482,5 +354,9 @@ export class RegisterPage implements OnInit {
     await this.loading.present();
 
     const { role, data } = await this.loading.onDidDismiss();
+  }
+
+  GoBack() {
+    this.navCtrl.navigateForward('/login');
   }
 }

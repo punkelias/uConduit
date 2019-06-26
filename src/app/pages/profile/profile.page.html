@@ -5,9 +5,9 @@
       <ion-col col-4></ion-col>
   </ion-row>
   <ion-card id='profile-card' *ngIf="user">
-    <ion-item id='profile-pic-item'>
+    <ion-avatar id='profile-pic-item'>
       <ion-img *ngIf="user.icon_path" id='profile-pic' [src]="user.icon_path"></ion-img>
-    </ion-item>
+    </ion-avatar>
     <ion-item id='profile-name'>
       <h1>{{user.first_name}} {{user.last_name}}</h1>
 
@@ -30,7 +30,7 @@
       <ion-item (click)="showPollsHistory()" id='polls-button'>
         <ion-grid id='points-grid'>
           <ion-row>
-            <ion-item id='polls-header'>0</ion-item>
+            <ion-item id='polls-header' *ngIf="completedPolls">{{completedPolls.length}}</ion-item>
           </ion-row>
           <ion-row>
             <ion-item id='polls-label'>polls completed</ion-item>
@@ -62,14 +62,6 @@
           <img src="../../../../assets/images/level1_badge.svg" class='badge-image level-{{user.completerLevel}}' id='completer-image'/>
         </ion-col>
       </ion-row>
-      <!--<ion-row class='badges-grid-row'>
-        <ion-col class='badges-grid-col'>
-            <img src="../../../../assets/images/level1_badge.png" class='badge-image level-0'/>
-            <ion-label id='hoarder-label'>Hoarder</ion-label>
-        </ion-col>
-        <ion-col>
-        </ion-col>
-      </ion-row>-->
     </ion-grid>
 
     <ion-row id='logout-row'>
