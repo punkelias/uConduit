@@ -5,19 +5,21 @@
       <ion-col col-4></ion-col>
   </ion-row>
   <div id="separator"></div>
-  <ion-slides pager=false slidesPerView="2" spaceBetween="20" *ngIf="polls && polls.length > 0; else emptyPolls">
+  <ion-slides pager=false [options]="slideOpts" *ngIf="polls && polls.length > 0; else emptyPolls">
     <ion-slide class='poll-slide' *ngFor="let item of polls" (click)="showDetails(item.id)">
       <ion-grid>
         <ion-row class="cover-row">
             <ion-col col-12>
-              <ion-img class='poll-cover' [src]="item.cover"></ion-img>
+              <div class="poll-cover">
+                <img class="poll-cover-img" src={{item.cover}}/>
+              </div>
+              <!--<ion-img class='poll-cover' [src]="item.cover"></ion-img>-->
             </ion-col>
           </ion-row>
         <ion-row class='poll-created-row'>
-          <ion-col col-4>
+          <ion-col col-4 class='poll-created-col'>
             <span class='poll-created' [ngStyle]="{'color': item.color}">{{item.created_at | dateAgo}}</span>
           </ion-col>
-          <ion-col col-4></ion-col>
           <ion-col col-4></ion-col>
         </ion-row>
         <ion-row class='poll-title'>

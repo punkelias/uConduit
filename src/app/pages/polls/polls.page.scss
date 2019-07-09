@@ -1,5 +1,5 @@
 * {
-    font-family: 'Lato-Regular';
+    font-family: 'Lato-Light';
   }
   
   h1 {
@@ -9,6 +9,9 @@
 
   #logo-header {
     --ion-background-color: #20201F;
+    position: relative;
+    top: 12px;
+    height: 40px;
   }
   
   ion-content {
@@ -58,18 +61,20 @@
   }
 
   .cover-row {
-      height: 40%;
+      height: 55%;
+      overflow: hidden;
   }
 
   .poll-cover {
-      height: 100%;
+      height: auto;
       width: 100%;
       max-height: 210px;
       border-radius: 25px 25px 0px 0px;
   }
 
-  .poll-cover img {
+  .poll-cover-img {
     object-fit: cover;
+    border-radius: 25px 25px 0px 0px;
   }
 
   .poll-created {
@@ -78,7 +83,7 @@
 
   .poll-created-row {
       position: relative;
-      top: 5%;
+      top: 0%;
   }
 
   .poll-info {
@@ -86,14 +91,22 @@
   }
 
   .poll-points {
+    font-family: 'Lato-Regular';
       font-weight: bold;
   }
 
   .poll-title {
-      height: 30%;
+      height: 23%;
   }
   
   .swiper-slide {
     background: #262525;
     border-radius: 25px;
+  }
+
+  .swiper-container {
+    width: 100%;
+  }
+  .swiper-slide {
+    width: 85%;
   }

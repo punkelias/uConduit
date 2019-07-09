@@ -4,6 +4,27 @@
     position: relative;
 }
 
+#logo {
+    position: absolute;
+    top: 15px;
+    z-index: 99;
+    width: 60%;
+    left: 20%;
+}
+
+h1 {
+    text-align: center;
+    color: #ffffff;
+    font-family: 'Lato-Hairline';
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 1;
+    position: absolute;
+    z-index: 99;
+    top: 40%;
+    left: 20%;
+}
+
 ion-content {
     --ion-background-color: #1A1919;
     --color: #D6D3D1;

@@ -12,6 +12,12 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['polls.page.scss']
 })
 export class PollsPage implements OnInit {
+  slideOpts = {
+    slidesPerView: 'auto',
+    centeredSlides: true,
+    spaceBetween: 15
+  };
+
   @ViewChild(IonSlides) slides: IonSlides;
   polls: Poll[];
   missions: Mission[];

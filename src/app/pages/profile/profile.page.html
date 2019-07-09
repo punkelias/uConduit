@@ -78,7 +78,7 @@
   </ion-item>
 
   <ion-card id='polls-history' [hidden]=!pollsHistoryHidden>
-    <ion-button id="polls-close-row" (click)="hidePollsHistory()" [attr.clear]="true">x</ion-button>
+    <ion-button id="polls-close-row" (click)="hidePollsHistory()" [attr.clear]="true" fill="clear">x</ion-button>
     <ion-grid id="polls-history-grid" *ngIf="completedPolls && completedPolls.length > 0; else emptyPolls">
       <ion-row id="polls-title-row">
         <ion-col col-12>
@@ -103,8 +103,8 @@
   </ion-card>
 
   <ion-card id='points-history' [hidden]=!pointsHistoryHidden>
-    <ion-button id="points-close-row" (click)="hidePointsHistory()" [attr.clear]="true">x</ion-button>
-    <ion-grid id="points-history-grid" *ngIf="redeemedHistory && redeemedHistory.length > 0; else emptyPoints">
+    <ion-button id="points-close-row" (click)="hidePointsHistory()" [attr.clear]="true" fill="clear">x</ion-button>
+    <ion-grid id="points-history-grid">
       <ion-row id="points-title-row">
         <ion-col col-12>
           CASH OUT
@@ -115,55 +115,44 @@
           You have {{user.points}} points.
         </ion-col>
       </ion-row>
-      <ion-row class="points-history-row" *ngFor="let item of redeemedHistory">
-        <ion-col class="point-spent-col" col-6>
-          {{item.points_spent}} points
-        </ion-col>
-        <ion-col class="point-reward-col" col-6>
-          {{item.reward | currency}}
-        </ion-col>
-      </ion-row>
+      <ion-button expand="full" fill="clear" class="hidden-button" (click)="setCashOut(10000)">
+        <ion-row class="points-history-row">
+          <ion-col class="point-spent-col" col-6>
+            10,000
+          </ion-col>
+          <ion-col class="point-reward-col" col-6>
+            $10.00
+          </ion-col>
+        </ion-row>
+      </ion-button>
+      
+      <ion-button expand="full" fill="clear" class="hidden-button" (click)="setCashOut(20000)">
+        <ion-row class="points-history-row">
+          <ion-col class="point-spent-col" col-6>
+            20,000
+          </ion-col>
+          <ion-col class="point-reward-col" col-6>
+            $20.00
+          </ion-col>
+        </ion-row>
+      </ion-button>
+      
+      <ion-button expand="full" fill="clear" class="hidden-button" (click)="setCashOut(50000)">
+        <ion-row class="points-history-row">
+          <ion-col class="point-spent-col" col-6>
+            50,000
+          </ion-col>
+          <ion-col class="point-reward-col" col-6>
+            $50.00
+          </ion-col>
+        </ion-row>
+      </ion-button>
     </ion-grid>
-
-    <ng-template #emptyPoints>
-      <div id="no-points-span">
-        There is no history of points redeemed.
-      </div>
-    </ng-template>
+    
     <ion-row id="cash-button-row">
       <ion-col col-12>
-        <ion-button color="success" id="cash-button" (click)="showCashPoints()">Cash Out</ion-button>
+        <ion-button id="cash-button" (click)="cashOut()" disabled="canRedeem" expand="full">Cash Out</ion-button>
       </ion-col>
     </ion-row>
   </ion-card>
-
-  <ion-card id='cash-points' [hidden]=!cashPointsHidden>
-      <ion-button id="cash-close-row" (click)="hidePointsHistory()" [attr.clear]="true">x</ion-button>
-      <ion-grid id="cash-points-grid">
-        <ion-row id="cash-title-row">
-          <ion-col col-12>
-            CASH OUT
-          </ion-col>
-        </ion-row>
-        <ion-row id="cash-subtitle-row">
-          <ion-col col-12 *ngIf="user">
-            You have {{user.points}} points.
-          </ion-col>
-        </ion-row>
-        <ion-row class="cash-points-row">
-          <ion-col class="cash-points-col" col-12>
-            <ion-select [(ngModel)]="selectedPoints" class='dropdown-cash-points' placeholder="Select Points to Cash">
-                <ion-select-option class='dropdown-cash' value="10000">10,000 => 10 USD</ion-select-option>
-                <ion-select-option class='dropdown-cash' value="20000">20,000 => 20 USD</ion-select-option>
-                <ion-select-option class='dropdown-cash' value="50000">50,000 => 50 USD</ion-select-option>
-              </ion-select>
-          </ion-col>
-        </ion-row>
-        <ion-row id="cash-out-button-row">
-          <ion-col col-12>
-            <ion-button color="success" id="cash-out-button" (click)="cashOut()">Cash Out</ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card>
 </ion-content>

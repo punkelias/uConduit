@@ -9,6 +9,9 @@ h1 {
 
 #logo-header {
   --ion-background-color: #20201F;
+  position: relative;
+  top: 12px;
+  height: 40px;
 }
 
 ion-content {
@@ -38,13 +41,12 @@ ion-item {
 
 #profile-pic {
   margin: 0 auto;
-  top: -14%;
-  left: 100%;
+  left: 150%;
   border-radius: 50%;
   display: inline-block;
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 100%;
 }
 
 #profile-name {
@@ -91,6 +93,7 @@ h1 {
   right: 0px;
   position: absolute;
   --ion-background-color: transparent;
+  color: #D6D3D1;
 }
 
 #polls-history-grid, #points-history-grid, #cash-points-grid {
@@ -107,10 +110,21 @@ h1 {
 .polls-history-row, .points-history-row, .cash-points-row {
     border-bottom: 1px solid #2C2C2C;
     height: 35px;
+    width: 100%;
+}
+
+.hidden-button button {
+  margin: 0;
+  padding: 0;
 }
 
 .poll-points-col, .point-reward-col, .cash-points-col {
     text-align: right;
+    color: #ffffff;
+}
+
+.point-spent-col {
+  color: #D6D3D1;
 }
 
 #points-title-row, #cash-title-row {
@@ -128,7 +142,7 @@ h1 {
     top: 0px;
     left: 0px;
     width: 100%;
-    height: 100%;
+    height: 200%;
     background-color: black;
     z-index: 90;
     opacity: 0.8;
@@ -140,6 +154,7 @@ h1 {
     width: 100%;
     text-align: center;
     --color: #D6D3D1;
+    height: 50px;;
   }
 
   #cash-points-grid {
@@ -280,4 +295,13 @@ h1 {
   color: white;
   top: 5%;
   position: relative;
+}
+
+#cash-button {
+  width: 50%;
+  margin: 0 auto;
+  color: #ffffff;
+  text-transform: none;
+  background: #BAB3B4;
+  height: 100%;
 }

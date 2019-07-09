@@ -1,5 +1,5 @@
 * {
-    font-family: 'Lato-Regular';
+    font-family: 'Lato-Light';
   }
   
   ion-content {
@@ -94,13 +94,15 @@ ion-grid {
     position: fixed;
     left: 33%;
     top: 40%;
+    z-index: 99;
 }
 
 .answer-col ion-button.hide {
     visibility: hidden;
     opacity: 0;
-    transition: visibility 0s 1s, opacity 1s linear;
+    transition: visibility 0s 1.5s, opacity 1.5s linear, transform 1.5s linear;
     transform:scale(0.1);
+    z-index: 0;
 }
 
 .multiple-answer-col ion-button.hide {
@@ -137,6 +139,9 @@ ion-grid {
     bottom: 5%;
     left: 5%;
     --background: var(--mainColor);
+    width: 95px;
+    height: 45px;
+    font-family: 'Lato-Regular';
 }
 
 .open-question-button ion-label {
@@ -277,6 +282,7 @@ ion-segment-button {
     position: relative;
     display: inline-block;
     font-size: 14px;
+    vertical-align: middle;
 }
 
 .matrix-answer-col {
@@ -303,6 +309,7 @@ ion-segment-button {
     width: 20%;
     position: relative;
     display: inline-block;
+    vertical-align: middle;
 }
 
 .matrix-radio-group ion-col ion-item {
@@ -459,4 +466,31 @@ rect {
     position: absolute;
     right: 0px;
     text-align: right !important;
+}
+
+ion-label {
+    font-family: 'Lato-Light';
+    font-weight: normal;
+}
+
+ion-button ion-label {
+    font-family: 'Lato-Regular';
+}
+
+#header-row {
+    font-family: 'Lato-Regular';
+    display: block;
+}
+
+#header-row ion-col {
+    width: 33%;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.dropdown-row {
+    position: relative;
+    top: 50px;
+    height: 68%;
 }

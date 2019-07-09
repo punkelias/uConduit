@@ -22,6 +22,7 @@ export class ProfilePage {
   cashPointsHidden = false;
   selectedPoints = 0;
   missions: Mission[];
+  canRedeem = false;
 
   constructor(
     public events: Events,
@@ -102,6 +103,18 @@ export class ProfilePage {
 
   hideCashPoints () {
     this.hidePointsHistory();
+  }
+
+  setCashOut(value: number) {
+    this.selectedPoints = value;
+
+    const pointsLeft = this.user.points - this.selectedPoints;
+    if (this.selectedPoints > 0 && pointsLeft > 0) {
+      this.canRedeem = true;
+    } else {
+      this.alertService.presentToast('You don\'t have enough points', 'error');
+      this.canRedeem = false;
+    }
   }
 
   cashOut() {
@@ -189,7 +202,7 @@ export class ProfilePage {
         );
       }
     } else {
-      this.alertService.presentToast('You cannot change the selected amount of points', 'error');
+      this.alertService.presentToast('You don\'t have enough points', 'error');
     }
     this.hideCashPoints();
   }

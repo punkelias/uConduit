@@ -56,6 +56,7 @@ export class DetailsPage implements OnInit {
     const themeWrapper = document.querySelector('body');
     themeWrapper.style.setProperty('--mainColor', this.poll.color);
     themeWrapper.style.setProperty('--bgColor', this.poll.background_color);
+    themeWrapper.style.setProperty('--ion-font-family', 'Lato-Light');
   }
 
   GoBack() {
@@ -108,7 +109,9 @@ export class DetailsPage implements OnInit {
     question.answered = true;
 
     if (this.poll.instant_feedback) {
-      this.createChart(question, value);
+      setTimeout(() => {
+        this.createChart(question, value);
+    }, 2000);
     }
   }
 

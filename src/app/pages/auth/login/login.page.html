@@ -1,5 +1,5 @@
 <ion-content padding id="login">
-  <ion-row>
+  <ion-row id="header">
       <ion-col col-4></ion-col>
       <ion-col col-4><img src="../../../../assets/images/uConduit-logo.png" id="logo" /></ion-col>
       <ion-col col-4></ion-col>
@@ -21,14 +21,14 @@
     </ion-item>
     <ion-row>
         <ion-col col-3></ion-col>
-        <ion-col col-6><ion-button type="submit" color="success" id="loginButton">Login</ion-button></ion-col>
+        <ion-col col-6><ion-button type="submit" expand="full" id="loginButton">Sign In</ion-button></ion-col>
         <ion-col col-3></ion-col>
     </ion-row>
   </form>
 
-  <ion-item>
+  <ion-item id="footer">
     <ion-button id="registerButton" [attr.clear]="true" fill="clear" (click)="registerModal()">
-        Don't have a account?
+        New here? Signing up is easy >
     </ion-button>
   </ion-item>
 </ion-content>

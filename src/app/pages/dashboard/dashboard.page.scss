@@ -16,3 +16,39 @@ ion-item {
     --color: #D6D3D1;
     --ion-background-color: transparent;
 }
+
+.tab-top-border {
+    text-align: center;
+    margin: 0 auto;
+    width: 50%;
+    background: #D6D3D1;
+    height: 2px;
+    position: absolute;
+    top: 0px;
+    display: none;
+}
+
+.tab-selected .tab-top-border {
+    display: block;
+}
+
+ion-tab-button {
+    color: rgba(214, 211, 209, 0.33);
+    background-color: #262525;
+}
+
+ion-tab-button.tab-selected {
+    color: #D6D3D1;
+}
+
+ion-tab-bar {
+    background-color: #262525;
+}
+
+.tab-bar-top-border {
+    width: 100%;
+    background: rgba(214, 211, 209, 0.2);
+    height: 2px;
+    position: absolute;
+    top: 0px;
+}

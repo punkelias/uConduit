@@ -5,6 +5,9 @@
 h1 {
     text-align: center;
     color: #D6D3D1;
+    font-family: 'Lato-Hairline';
+    font-size: 40px;
+    line-height: 0.9;
 }
 
 ion-content {
@@ -13,7 +16,7 @@ ion-content {
 }
 
 #login {
-    --background: url('../../../../assets/images/Loading-image-6-signin.jpg') no-repeat 50% 10%;
+    --background: #1A1919 url('../../../../assets/images/Loading-image-6-signin.jpg') center center/cover no-repeat fixed;
     background-repeat: no-repeat;
     background-size:cover;
 }
@@ -32,13 +35,47 @@ ion-item {
     position: absolute; 
     bottom: -10px;
     font-size: 12px;
+    text-transform: none;
+    font-family: 'Cabin';
+    letter-spacing: 0px;
 }
 
 #loginButton {
     --color: #D6D3D1;
+    --background: rgba(255, 255, 255, 0.25);
     margin-top: 20px;
+    height: 50px;
+    width: 150px;
+    --box-shadow: none;
+    text-transform: none;
+    font-size: 16px;
 }
 
 ion-input {
     border-bottom: solid #D6D3D1 1px;
+    font-family: 'Lato-Light';
+    font-size: 22px;
 }
+
+input {
+    font-family: 'Lato-Light';
+}
+
+::-webkit-input-placeholder {
+    font-family: 'Lato-Light';
+  }
+  ::-moz-placeholder {
+    font-family: 'Lato-Light';
+  }
+  :-ms-input-placeholder {
+    font-family: 'Lato-Light';
+  }
+  ::placeholder {
+    font-family: 'Lato-Light';
+  }
+
+  #footer {
+    position: absolute;
+    width: 90%;
+    bottom: 20px;
+  }
