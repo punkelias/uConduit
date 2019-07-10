@@ -133,14 +133,15 @@
   
             <ion-item *ngIf="cities && cities.length > 0">
               <ion-label position="floating">City</ion-label>
-              <!--<ion-select formControlName="cityid" class='dropdown-cities' placeholder="Select your City">
+              <ion-select formControlName="cityid" class='dropdown-cities' placeholder="Select your City">
                 <ion-select-option *ngFor="let city of cities" class='dropdown-city' value="{{city.id}}">{{city.name}}</ion-select-option>
-              </ion-select>-->
-              <ng-template #customTemplate let-attrs="attrs">
+              </ion-select>
+              <!--<ng-template #customTemplate let-attrs="attrs">
                  <span [innerHTML]="attrs.data.name | boldprefix:attrs.keyword" class="result-name"></span>
               </ng-template>
 
               <ion-auto-complete formControlName="cityid" [template]="customTemplate" [dataProvider]="authService" ngDefaultControl class="overflow city-autocomplete"></ion-auto-complete>
+            -->
             </ion-item>
 
             <ion-item>

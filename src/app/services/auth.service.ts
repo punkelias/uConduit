@@ -12,7 +12,6 @@ import { Answer } from '../models/answer';
 import { Mission } from '../models/mission';
 import { PlayerMission } from '../models/playerMission';
 import {Observable, of} from 'rxjs';
-import { AutoCompleteService } from 'ionic4-auto-complete';
 
 @Injectable({
   providedIn: 'root'

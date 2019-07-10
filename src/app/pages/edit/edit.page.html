@@ -133,10 +133,10 @@
     
               <ion-item *ngIf="cities">
                 <ion-label position="floating">City</ion-label>
-                <ion-input type="text" formControlName="cityid" value="{{user.city}}" [(ngModel)]='citySearch'></ion-input>
-                <!--<ion-select formControlName="cityid" class='dropdown-cities' placeholder="Select your City" value="{{user.city_id}}">
+                <!--<ion-input type="text" formControlName="cityid" value="{{user.city}}" [(ngModel)]='citySearch'></ion-input>-->
+                <ion-select formControlName="cityid" class='dropdown-cities' placeholder="Select your City" value="{{user.city_id}}">
                   <ion-select-option *ngFor="let city of cities" class='dropdown-city' value="{{city.id}}">{{city.name}}</ion-select-option>
-                </ion-select>-->
+                </ion-select>
                 <!--<ng-template #customTemplate let-attrs="attrs">
                   <span [innerHTML]="attrs.data.name | boldprefix:attrs.keyword" class="result-name"></span>
                </ng-template>
